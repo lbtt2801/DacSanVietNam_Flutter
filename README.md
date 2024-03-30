@@ -1,4 +1,4 @@
-# dacsanvietnam
+# Ứng dụng Giới thiệu Đặc sản Vùng miền ở Việt Nam
 
 A new Flutter project.
 
