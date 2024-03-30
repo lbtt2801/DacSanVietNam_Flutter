@@ -44,7 +44,7 @@ Future<void> main() async {
 
   ref = await SharedPreferences.getInstance();
 
-  deleteUser("NzUeEuQvJiY9e6SOET96Jajv0Ur2");
+  // deleteUser("NzUeEuQvJiY9e6SOET96Jajv0Ur2");
 
   runApp(const MainApp());
 }
