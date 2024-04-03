@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "41890746519",
+    "firebase_url": "https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "dacsanvietnam-6ee19",
+    "storage_bucket": "dacsanvietnam-6ee19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41890746519:android:e985a7d3cee3b3e61199d2",
+        "android_client_info": {
+          "package_name": "com.example.dacsanvietnam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41890746519-p5jko6ssphf15sh8837h3ug9ft4t24i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41890746519-p5jko6ssphf15sh8837h3ug9ft4t24i4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41890746519-s4tef2v902tuo3knvbr6hv5kvvvojcj9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dacsanvietnam"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
