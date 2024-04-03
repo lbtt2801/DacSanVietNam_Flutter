@@ -1,7 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../Model/dac_san.dart';
@@ -22,6 +25,41 @@ class TrangDacSan extends StatefulWidget {
 class _TrangDacSanState extends State<TrangDacSan> {
   String selectedChip = dsLoaiDacSan[0].tenLoai;
   List<DacSan> lstDacSan = dsDacSan;
+
+  String Address = ' 👈 Lấy vị trí hiện tại';
+
+  void getUserAddress() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return;
+      }
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      if (placemarks.isNotEmpty) {
+        setState(() {
+          Address = placemarks.first.administrativeArea!;
+        });
+      } else {
+        if (kDebugMode) {
+          print('Không tìm thấy địa danh');
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Lỗi khi tìm các địa danh: $e');
+      }
+    }
+  }
 
   void selectChip(LoaiDacSan chip) {
     setState(() {
@@ -46,6 +84,24 @@ class _TrangDacSanState extends State<TrangDacSan> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
+              Row(
+                children: [
+                  IconButton(
+                    style: ButtonStyle(
+                        maximumSize:
+                        MaterialStateProperty.all(const Size(40, 40))),
+                    onPressed: () async {
+                      getUserAddress();
+                    },
+                    icon: LoadHinh("assets/images/ic_location.png"),
+                  ),
+                  Text( Address.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlue,
+                      )),
+                ],
+              ),
               CarouselSlider(
                 options: CarouselOptions(
                   height: MediaQuery.of(context).size.height * 0.2 + 30,

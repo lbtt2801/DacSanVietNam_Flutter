@@ -32,14 +32,14 @@ Future<void> main() async {
 
   await Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: "AIzaSyDbOO5dKhoiF8kmDrnbigTKsTmj_8xSPDg",
-          authDomain: "musicplayerz-63f2e.firebaseapp.com",
+          apiKey: "AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8",
+          authDomain: "dacsanvietnam-6ee19.firebaseapp.com",
           databaseURL:
-              "https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "musicplayerz-63f2e",
-          storageBucket: "musicplayerz-63f2e.appspot.com",
+          "https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "dacsanvietnam-6ee19",
+          storageBucket: "dacsanvietnam-6ee19.appspot.com",
           messagingSenderId: "132894885676",
-          appId: "1:132894885676:web:659f463a6d8ac6aa3ece89",
+          appId: "1:41890746519:android:e985a7d3cee3b3e61199d2",
           measurementId: "G-ES189ZW8QH"));
 
   ref = await SharedPreferences.getInstance();
