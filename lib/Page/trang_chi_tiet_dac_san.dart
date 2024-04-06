@@ -2,16 +2,21 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart';
+import 'package:vinaFoods/Widget/RatingBar.dart';
+import 'package:vinaFoods/Widget/Review.dart';
 
 import '../Model/vung_mien.dart';
+import '../Widget/ButtonSave.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final int maDS;
+
   const TrangChiTietDacSan({super.key, required this.maDS});
 
   @override
@@ -21,6 +26,8 @@ class TrangChiTietDacSan extends StatefulWidget {
 class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   @override
   Widget build(BuildContext context) {
+    bool isCheck = false;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -53,26 +60,32 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       fontFamily: 'RobotoBlack')),
             ),
             // const SizedBox(height: 0),
-            TextButton(
-              style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(
-                  EdgeInsetsDirectional.symmetric(
-                    horizontal: 15,
-                    vertical: 0,
+
+            Row(
+              children: [
+                TextButton(
+                  style: const ButtonStyle(
+                    padding: MaterialStatePropertyAll(
+                      EdgeInsetsDirectional.symmetric(
+                        horizontal: 15,
+                        vertical: 0,
+                      ),
+                    ),
                   ),
+                  onPressed: () {
+                    context.push(
+                        "/dacsan/vungmien/${dsDacSan[widget.maDS - 1].idMien}");
+                  },
+                  child: Text(
+                      "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idMien)}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: Colors.amber,
+                          fontSize: 24,
+                          fontFamily: 'ExtraBoldItalic')),
                 ),
-              ),
-              onPressed: () {
-                context.push(
-                    "/dacsan/vungmien/${dsDacSan[widget.maDS - 1].idMien}");
-              },
-              child: Text(
-                  "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idMien)}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.amber,
-                      fontSize: 24,
-                      fontFamily: 'ExtraBoldItalic')),
+                const ButtonSave(),
+              ],
             ),
             const SizedBox(height: 20),
             Container(
@@ -186,7 +199,58 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           color: Colors.black,
                           fontWeight: FontWeight.w900)),
                 )),
-            const SizedBox(height: 5),
+            const SizedBox(height: 25),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 15,
+              ),
+              child: Text('Nơi bán đề xuất',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.teal,
+                      fontSize: 28,
+                      fontFamily: "RobotoBlack")),
+            ),
+            const SizedBox(height: 25),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 15,
+              ),
+              child: Text('Đánh giá',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.teal,
+                      fontSize: 28,
+                      fontFamily: "RobotoBlack")),
+            ),
+            Card(
+                color: const Color.fromARGB(255, 242, 242, 242),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8.0),
+                    child: const RatingWidget())),
+            const SizedBox(height: 25),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 15,
+              ),
+              child: Text('Nhận xét',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.teal,
+                      fontSize: 28,
+                      fontFamily: "RobotoBlack")),
+            ),
+            Card(
+                color: const Color.fromARGB(255, 242, 242, 242),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8.0),
+                    child: ReviewsList())),
           ],
         ),
       ),
