@@ -31,7 +31,7 @@ CachedNetworkImage cachedImage(String url) {
     imageUrl: url,
     fit: BoxFit.cover,
     height: 180,
-    width: 220,
+    width: 270,
   );
 }
 

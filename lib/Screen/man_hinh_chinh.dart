@@ -179,6 +179,10 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
     return BottomNavigationBar(
       backgroundColor: const Color.fromARGB(255, 30, 144, 255),
       items: const [
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.accessibility_new_sharp),
+        //   label: 'Yêu thich',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Đặc sản',

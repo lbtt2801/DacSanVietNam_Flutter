@@ -119,7 +119,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                 items: buildBanner(5),
               ),
               buildDacSanNoiBat(),
-              headerLoaiDacSan(),
+              // headerLoaiDacSan(),
               Column(
                 children: buildDanhSachDacSan(),
               )
@@ -162,12 +162,16 @@ class _TrangDacSanState extends State<TrangDacSan> {
                 queryParameters: {"noiBat": "true"},
               );
             },
-            child: const Text("Những đặc sản Việt Nam bạn không thể bỏ qua",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.lightBlue,
-                  fontSize: 16
-                )),
+            child: const Column(
+              children: [
+                Text("------- Đặc sản quanh bạn -------",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.lightBlue,
+                      fontSize: 20
+                    )),
+              ],
+            ),
           ),
         ),
         Padding(
@@ -203,7 +207,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
               height: MediaQuery
                   .of(context)
                   .size
-                  .height * 0.2,
+                  .height * 0.1,
               width: MediaQuery
                   .of(context)
                   .size
@@ -212,8 +216,8 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   horizontal: MediaQuery
                       .of(context)
                       .size
-                      .width * 0.1,
-                  vertical: 10),
+                      .width * 0.05,
+                  vertical: 5),
               child: InkWell(
                 onTap: () {
                   context.push("/dacsan/chitiet/${dsDacSan[i].idDacSan}");
@@ -426,7 +430,7 @@ class DacSanList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Container(
-                        width: 250,
+                        width: 290,
                         padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -437,7 +441,7 @@ class DacSanList extends StatelessWidget {
                                   child: cachedImage(lstDacSan[index].avatar!)
                               ),
                             ),
-                            SizedBox(height: 15),
+                            SizedBox(height: 13),
                             Padding(
                               padding: const EdgeInsets.only(left: 10.0),
                               child: Row(
@@ -446,7 +450,7 @@ class DacSanList extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 17,
+                                        fontSize: 15,
                                       )
                                   ),
                                   const Spacer(),

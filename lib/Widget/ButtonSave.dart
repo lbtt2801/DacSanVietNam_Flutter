@@ -13,7 +13,7 @@ class _ButtonSaveState extends State<ButtonSave> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      iconSize: 24,
+      iconSize: 37,
       color: Colors.red,
       icon: Icon(isCheck ? Icons.favorite : Icons.favorite_outline),
       onPressed: () {

@@ -257,4 +257,8 @@ List<DacSan> getIDTuTenTinh(String? tenTinh) {
   return DSFiterDS;
 }
 
-
+// Lấy tên tỉnh từ ID
+String getTinhTuID(String? idTinh) {
+  TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.idTinh == idTinh);
+  return IDTinh.tenTinh.toString();
+}

@@ -18,6 +18,7 @@ import '../Service/thu_vien_api.dart';
 import '../main.dart';
 
 final rootNavKey = GlobalKey<NavigatorState>();
+final yeuThich = GlobalKey<NavigatorState>();
 final dacsanNavKey = GlobalKey<NavigatorState>();
 final nguoiDungNavKey = GlobalKey<NavigatorState>();
 
@@ -44,6 +45,20 @@ final GoRouter router = GoRouter(
         }
       },
       branches: [
+        // StatefulShellBranch(
+        //   navigatorKey: yeuThich,
+        //     routes: [
+        //       GoRoute(
+        //         parentNavigatorKey: dacsanNavKey,
+        //         path: '/dacsan',
+        //         name: "Danh sách đặc sản",
+        //         builder: (context, state) {
+        //           return const TrangDacSan();
+        //       },
+        //       )
+        //     ]
+        //
+        // ),
         StatefulShellBranch(
           navigatorKey: dacsanNavKey,
           routes: [

@@ -70,32 +70,55 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
             ),
             // const SizedBox(height: 0),
 
-            Row(
-              children: [
-                TextButton(
-                  style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(
-                      EdgeInsetsDirectional.symmetric(
-                        horizontal: 15,
-                        vertical: 0,
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                children: [
+                  TextButton(
+                    style: const ButtonStyle(
+                      padding: MaterialStatePropertyAll(
+                        EdgeInsetsDirectional.symmetric(
+                          horizontal: 15,
+                          vertical: 0,
+                        ),
                       ),
                     ),
+                    onPressed: () {
+                      context.push(
+                          "/dacsan/tinhThanh/${dacSan.idTinh}");
+                    },
+                    child: Text(
+                        // "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idTinh)}",
+                        getTinhTuID(dacSan.idTinh),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            color: Colors.amber,
+                            fontSize: 24,
+                            fontFamily: 'ExtraBoldItalic')),
                   ),
-                  onPressed: () {
-                    context.push(
-                        "/dacsan/tinhThanh/${dacSan.idTinh}");
-                  },
-                  child: const Text(
-                      // "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idTinh)}",
-                      "Đặc sản",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          color: Colors.amber,
-                          fontSize: 24,
-                          fontFamily: 'ExtraBoldItalic')),
-                ),
-                const ButtonSave(),
-              ],
+                  Spacer(),
+                  const ButtonSave(),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      dacSan.sao.toString(),
+                      style: TextStyle(fontSize: 20),
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                  // Text('Xuất xứ: ${getTenTinh(dacSan.xuatXu)}'),
+                  const Icon(
+                    Icons.star,
+                    color: Colors.yellow,
+                    size: 27,
+                    weight: 10,
+                  )
+                ],
+              ),
             ),
             const SizedBox(height: 20),
             Container(
@@ -179,17 +202,17 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           fontWeight: FontWeight.w900)),
                 )),
             const SizedBox(height: 25),
-            const Padding(
-              padding: EdgeInsets.only(
-                left: 15,
-              ),
-              child: Text('Nguyên liệu',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.teal,
-                      fontSize: 28,
-                      fontFamily: "RobotoBlack")),
-            ),
+            // const Padding(
+            //   padding: EdgeInsets.only(
+            //     left: 15,
+            //   ),
+            //   child: Text('Nguyên liệu',
+            //       style: TextStyle(
+            //           fontWeight: FontWeight.w600,
+            //           color: Colors.teal,
+            //           fontSize: 28,
+            //           fontFamily: "RobotoBlack")),
+            // ),
             // Card(
             //     color: const Color.fromARGB(255, 242, 242, 242),
             //     shape: RoundedRectangleBorder(
