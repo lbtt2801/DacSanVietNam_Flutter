@@ -32,9 +32,9 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       () async {
         await getTinhThanh();
         await getHinhAnh();
-        // await getVungMien();
-        // await getLoaiDacSan();
-        // await getDacSan();
+        await getVung();
+        await getLoaiDacSan();
+        await getDacSan();
         // await getDacSanVungMien();
         // await getDacSanNoiBat();
         // nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;

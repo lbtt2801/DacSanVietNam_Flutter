@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class DacSan {
   String? idDacSan;
   String? tenDS;
@@ -24,7 +26,7 @@ class DacSan {
       idDacSan: json['IDDacSan'],
       tenDS: json['TenDS'],
       moTa: json['MoTa'],
-      sao: json['Sao'],
+      sao:  double.parse(json['Sao']),
       avatar: json['Avatar'],
       trangThai: json['TrangThai'],
       idLoaiDS: json['IDLoaiDS'],

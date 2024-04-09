@@ -1,11 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vinaFoods/Model/tinh_thanh.dart';
 
 import '../Model/dac_san.dart';
 import '../Model/loai_dac_san.dart';
@@ -25,7 +27,8 @@ class TrangDacSan extends StatefulWidget {
 class _TrangDacSanState extends State<TrangDacSan> {
   String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
   List<DacSan> lstDacSan = dsDacSan;
-
+  List<TinhThanh> dsTinhLocal = dsTinhThanh;
+  List<String> DSMien = ["Bắc", "Trung", "Nam"];
   String Address = ' 👈 Lấy vị trí hiện tại';
 
   void getUserAddress() async {
@@ -43,7 +46,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
         desiredAccuracy: LocationAccuracy.high);
     try {
       List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      await placemarkFromCoordinates(position.latitude, position.longitude);
 
       if (placemarks.isNotEmpty) {
         setState(() {
@@ -89,7 +92,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   IconButton(
                     style: ButtonStyle(
                         maximumSize:
-                            MaterialStateProperty.all(const Size(40, 40))),
+                        MaterialStateProperty.all(const Size(40, 40))),
                     onPressed: () async {
                       getUserAddress();
                     },
@@ -104,7 +107,10 @@ class _TrangDacSanState extends State<TrangDacSan> {
               ),
               CarouselSlider(
                 options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height * 0.2 + 30,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.2 + 30,
                   animateToClosest: true,
                   pageSnapping: true,
                   enableInfiniteScroll: true,
@@ -112,10 +118,10 @@ class _TrangDacSanState extends State<TrangDacSan> {
                 ),
                 items: buildBanner(5),
               ),
-              // buildDacSanNoiBat(),
+              buildDacSanNoiBat(),
               headerLoaiDacSan(),
               Column(
-                // children: buildDanhSachDacSan(),
+                children: buildDanhSachDacSan(),
               )
             ],
           ),
@@ -124,58 +130,57 @@ class _TrangDacSanState extends State<TrangDacSan> {
     );
   }
 
-  // List<Widget> buildDanhSachDacSan() {
-  //   List<Widget> dsWidget = [];
-  //   dsWidget = dsVungMien.map((vungMien) {
-  //     return buildRowDacSan(vungMien);
-  //   }).toList();
-  //   return dsWidget;
-  // }
+  List<Widget> buildDanhSachDacSan() {
+    List<Widget> dsWidget = [];
+    dsWidget = dsVungMien.map((vung) {
+      return buildRowDacSan(vung);
+    }).toList();
+    return dsWidget;
+  }
 
-  // Column buildRowDacSan(VungMien vungMien) {
-  //   return Column(
-  //     children: [
-  //       headerVungMien(vungMien),
-  //       DacSanList(
-  //           lstDacSan: lstDacSan
-  //               .where((dacSan) => dacSan.idMien == vungMien.idMien)
-  //               .toList()),
-  //     ],
-  //   );
-  // }
+  Column buildRowDacSan(Vung vung) {
+    return Column(
+      children: [
+        headerVungMien(vung),
+        TinhList(
+            lstTinhThanh: dsTinhLocal
+                .where((tt) => tt.idVung == vung.idVung).toList()
+        )
+      ],
+    );
+  }
 
-  // Column buildDacSanNoiBat() {
-  //   return Column(
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.all(10.0),
-  //         child: TextButton(
-  //           onPressed: () {
-  //             context.goNamed(
-  //               "timKiem",
-  //               queryParameters: {"noiBat": "true"},
-  //             );
-  //           },
-  //           child: const Text("Những đặc sản Việt Nam bạn không thể bỏ qua",
-  //               style: TextStyle(
-  //                 fontWeight: FontWeight.bold,
-  //                 color: Colors.lightBlue,
-  //               )),
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: const EdgeInsets.only(
-  //           bottom: 10,
-  //         ),
-  //         child: DacSanList(
-  //             lstDacSan: lstDacSan
-  //                 .where((dacSan) => dsDacSanNoiBat
-  //                     .any((element) => element.idDacSan == dacSan.idDacSan))
-  //                 .toList()),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Column buildDacSanNoiBat() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextButton(
+            onPressed: () {
+              context.goNamed(
+                "timKiem",
+                queryParameters: {"noiBat": "true"},
+              );
+            },
+            child: const Text("Những đặc sản Việt Nam bạn không thể bỏ qua",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightBlue,
+                  fontSize: 16
+                )),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 10,
+          ),
+          child: DacSanList(
+            lstDacSan: getIDTuTenTinh(Address),
+          )
+        )
+      ],
+    );
+  }
 
   List<Widget> buildBanner(int limit) {
     List<Widget> dsWidget = [];
@@ -195,10 +200,19 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   ),
                 ),
               ),
-              height: MediaQuery.of(context).size.height * 0.2,
-              width: MediaQuery.of(context).size.width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.2,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.1,
+                  horizontal: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.1,
                   vertical: 10),
               child: InkWell(
                 onTap: () {
@@ -229,12 +243,6 @@ class _TrangDacSanState extends State<TrangDacSan> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const Text(
-            "Loại đặc sản: ",
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.lightBlue),
-            maxLines: 1,
-          ),
           const SizedBox(width: 10.0),
           Flexible(
             flex: 4,
@@ -245,7 +253,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   bool isSelected = loaiDacSan.tenLoaiDS == selectedChip;
                   return AnimatedContainer(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
+                      horizontal: 10,
                     ),
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -255,7 +263,9 @@ class _TrangDacSanState extends State<TrangDacSan> {
                         style: TextStyle(
                           color: isSelected
                               ? Colors.white
-                              : Theme.of(context).disabledColor,
+                              : Theme
+                              .of(context)
+                              .disabledColor,
                         ),
                       ),
                       selected: isSelected,
@@ -263,7 +273,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                         selectChip(loaiDacSan);
                         lstDacSan = dsDacSan
                             .where((dacSan) =>
-                                dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
+                        dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
                             .toList();
                       },
                       selectedColor: Colors.blue,
@@ -279,31 +289,105 @@ class _TrangDacSanState extends State<TrangDacSan> {
     );
   }
 
-  Padding headerVungMien(VungMien vungMien) {
+  Padding headerVungMien(Vung vungMien) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(20.0),
       child: Row(
         children: <Widget>[
           Text(vungMien.tenVung!,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.lightBlue,
-              )),
-          const Spacer(), // use Spacer
-          TextButton(
-            onPressed: () {
-              // context.goNamed(
-              //   "timKiem",
-              //   queryParameters: {"ten": "Mì"},
-              // );
-              context.go("/dacsan/vungmien/${vungMien.idVung}");
-            },
-            child: const Text("Xem thêm",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.lightBlue)),
-          ),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.lightBlue,
+              // overflow: TextOverflow.fade,
+            ),
+            overflow: TextOverflow.ellipsis,
+            ),
+          const Spacer(),
+          // use Spacer
+          // TextButton(
+          //   onPressed: () {
+          //     // context.goNamed(
+          //     //   "timKiem",
+          //     //   queryParameters: {"ten": "Mì"},
+          //     // );
+          //     context.go("/dacsan/vungmien/${vungMien.idVung}");
+          //   },
+          //   child: const Text("Xem thêm",
+          //       style: TextStyle(
+          //         fontSize: 12, fontWeight: FontWeight.bold, color: Colors.lightBlue)),
+          // ),
         ],
       ),
+    );
+  }
+}
+
+class TinhList extends StatelessWidget {
+  final List<TinhThanh> lstTinhThanh;
+
+  const TinhList({super.key, required this.lstTinhThanh});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 250,
+          child: Container(
+            color: Theme
+                .of(context)
+                .brightness == Brightness.light
+                ? Colors.lightBlue.shade100
+                : const Color.fromARGB(155, 135, 206, 250),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: lstTinhThanh.length,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () =>
+                  {
+                    getCommentsFollowIDDacSan(1),
+                    context.go("/dacsan/tinhThanh/${lstTinhThanh[index].idTinh!}")
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.all(10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Container(
+                      width: 250,
+                      padding: const EdgeInsets.all(4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: cachedImage(lstTinhThanh[index].linkAnh!)
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text(lstTinhThanh[index].tenTinh!,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 19,
+                                )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -318,9 +402,11 @@ class DacSanList extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 250,
+          height: 265,
           child: Container(
-            color: Theme.of(context).brightness == Brightness.light
+            color: Theme
+                .of(context)
+                .brightness == Brightness.light
                 ? Colors.lightBlue.shade100
                 : const Color.fromARGB(155, 135, 206, 250),
             child: ListView.builder(
@@ -328,37 +414,65 @@ class DacSanList extends StatelessWidget {
               itemCount: lstDacSan.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                  onTap: () => {
+                  onTap: () =>
+                  {
                     getCommentsFollowIDDacSan(1),
-                    context.go("/dacsan/chitiet/${lstDacSan[index].idDacSan}"),
+                    context.go("/dacsan/chitiet/${lstDacSan[index].idDacSan}")
                   },
-                  child: Card(
-                    margin: const EdgeInsets.all(10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Container(
-                      width: 250,
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: cachedImage(lstDacSan[index].avatar!),
+                  child: Expanded(
+                    child: Card(
+                      margin: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Container(
+                        width: 250,
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: cachedImage(lstDacSan[index].avatar!)
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 15),
-                          Text(lstDacSan[index].tenDS!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              )),
-                          Text(
-                            'Xuất xứ: ${getTenTinh(lstDacSan[index].idTinh)}',
-                          ),
-                        ],
+                            SizedBox(height: 15),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Row(
+                                children: [
+                                  Text(lstDacSan[index].tenDS!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      )
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                        Text(
+                                        lstDacSan[index].sao.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.grey, // Màu xám hoặc màu tùy chọn của bạn
+                                        ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                    ],
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 27,
+                                    weight: 10,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -199,6 +199,13 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                   }
                   return null;
                 },
+                dropdownDecoratorProps: const DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(),
+                    labelText: "Chọn tỉnh thành",
+                    hintText: "Vui lòng chọn",
+                  ),
+                ),
                 popupProps: const PopupProps.menu(
                   title: Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),

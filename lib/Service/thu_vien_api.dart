@@ -71,18 +71,19 @@ Future<NguoiDung?> getUser(String uid) async {
   return null;
 }
 
-Future<void> getVungMien() async {
+Future<void> getVung() async {
   var reponse =
       await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getVungAPI.php')); //https://cntt199.000webhostapp.com/getVungMien.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
-    VungMien vungMien = VungMien.fromJson(document);
+    Vung vungMien = Vung.fromJson(document);
     dsVungMien.add(vungMien);
   }
 }
 
 Future<void> getLoaiDacSan() async {
+  dsLoaiDacSan.insert(0, LoaiDacSan(idLoaiDS: 'all', tenLoaiDS: 'Tất cả'));
   var reponse = await get(
       Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getLoaiDacSan.php')); //https://cntt199.000webhostapp.com/getLoaiDacSan.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
@@ -233,3 +234,27 @@ Future<String> getNameUser(String idUser) async {
     throw Exception('Failed to fetch name user');
   }
 }
+
+
+List<String?> getTinhTuVung(String? idOfVung) {
+  List<TinhThanh> DSTinh = dsTinhThanh.where((ds) => ds.idVung == idOfVung).toList();
+
+  List<String?> tenTinhList = DSTinh.map((tinh) => tinh.idTinh).toList();
+
+  return tenTinhList;
+}
+
+
+List<DacSan> getIDTuTenTinh(String? tenTinh) {
+
+  if(tenTinh == ' 👈 Lấy vị trí hiện tại')
+      return dsDacSan;
+
+    TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh);
+
+  List<DacSan> DSFiterDS = dsDacSan.where((ds) => ds.idTinh == IDTinh.idTinh).toList();
+
+  return DSFiterDS;
+}
+
+

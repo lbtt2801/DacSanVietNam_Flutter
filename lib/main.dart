@@ -18,7 +18,7 @@ import 'Model/vung_mien.dart';
 import 'Router/router_config.dart';
 
 late final SharedPreferences ref;
-List<VungMien> dsVungMien = [];
+List<Vung> dsVungMien = [];
 List<HinhAnh> dsHinhAnh = [];
 List<TinhThanh> dsTinhThanh = [];
 List<NoiBan> dsNoiBan = [];

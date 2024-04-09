@@ -11,16 +11,16 @@ import '../Service/thu_vien_api.dart';
 import '../Service/thu_vien_widget.dart';
 import '../main.dart';
 
-class TrangDacSanTheoVung extends StatefulWidget {
-  final int maVung;
+class TrangDacSanTheoTinh extends StatefulWidget {
+  final String maTinh;
 
-  const TrangDacSanTheoVung({super.key, required this.maVung});
+  const TrangDacSanTheoTinh({super.key, required this.maTinh});
 
   @override
-  _TrangDacSanTheoVungState createState() => _TrangDacSanTheoVungState();
+  _TrangDacSanTheoTinhState createState() => _TrangDacSanTheoTinhState();
 }
 
-class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
+class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
   List<DacSan> lstDacSan = [];
   List<DacSan> filteredDacSan = [];
   String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
@@ -35,10 +35,8 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
   void initState() {
     super.initState();
     lstDacSan =
-        dsDacSan.where((dacSan) => dacSan.idTinh == widget.maVung).toList();
-    filteredDacSan = lstDacSan
-        .where((dacSan) => dacSan.idLoaiDS == dsLoaiDacSan[0].idLoaiDS)
-        .toList();
+        dsDacSan.where((dacSan) => dacSan.idTinh == widget.maTinh).toList();
+    filteredDacSan = lstDacSan;
   }
 
   @override
@@ -73,12 +71,19 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        subtitle: Column(
+                        subtitle: const Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Thành phần: ${dacSan.moTa!}",
+                            Text("5",
+                                style: TextStyle(fontSize: 20),
                                 maxLines: 1, overflow: TextOverflow.ellipsis),
                             // Text('Xuất xứ: ${getTenTinh(dacSan.xuatXu)}'),
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 27,
+                              weight: 10,
+                            )
                           ],
                         ),
                         leading: Padding(
@@ -114,12 +119,12 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const Text(
-            "Loại đặc sản: ",
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.lightBlue),
-            maxLines: 1,
-          ),
+          // const Text(
+          //   "Loại đặc sản: ",
+          //   style:
+          //       TextStyle(fontWeight: FontWeight.bold, color: Colors.lightBlue),
+          //   maxLines: 1,
+          // ),
           const SizedBox(width: 10.0),
           Flexible(
             flex: 5,
@@ -130,7 +135,7 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                   bool isSelected = loaiDacSan.tenLoaiDS == selectedChip;
                   return AnimatedContainer(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
+                      horizontal: 7,
                     ),
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -146,10 +151,14 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                       selected: isSelected,
                       onSelected: (selected) {
                         selectChip(loaiDacSan);
-                        filteredDacSan = lstDacSan
-                            .where((dacSan) =>
-                                dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
-                            .toList();
+                        if (loaiDacSan.tenLoaiDS == "Tất cả")
+                          filteredDacSan = lstDacSan;
+                        else{
+                          filteredDacSan = lstDacSan
+                              .where((dacSan) =>
+                          dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
+                              .toList();
+                        }
                       },
                       selectedColor: Colors.blue,
                       checkmarkColor: Colors.white,

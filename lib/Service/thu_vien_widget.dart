@@ -23,14 +23,15 @@ Widget LoadingScreen() {
   );
 }
 
-CachedNetworkImage cachedImage(String id) {
+CachedNetworkImage cachedImage(String url) {
   return CachedNetworkImage(
     progressIndicatorBuilder: (context, url, downloadProgress) =>
         LinearProgressIndicator(value: downloadProgress.progress),
     errorWidget: (context, url, error) => const Icon(Icons.error),
-    imageUrl: getURLImage(id),
+    imageUrl: url,
     fit: BoxFit.cover,
-    height: 150,
+    height: 180,
+    width: 220,
   );
 }
 
