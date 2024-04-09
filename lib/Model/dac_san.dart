@@ -1,35 +1,34 @@
-class DacSan
-{
-  int? idDacSan;
-  String? tenDacSan;
-  int? avatar;
+class DacSan {
+  String? idDacSan;
+  String? tenDS;
   String? moTa;
-  String? thanhPhan;
-  int? xuatXu;
-  int? idMien;
-  int? loaiDacSan;
+  double? sao;
+  String? avatar;
+  String? trangThai;
+  String? idLoaiDS;
+  String? idTinh;
 
   DacSan({
     this.idDacSan,
-    this.tenDacSan,
-    this.avatar,
+    this.tenDS,
     this.moTa,
-    this.thanhPhan,
-    this.xuatXu,
-    this.idMien,
-    this.loaiDacSan,
+    this.sao,
+    this.avatar,
+    this.trangThai,
+    this.idLoaiDS,
+    this.idTinh,
   });
 
   factory DacSan.fromJson(Map<String, dynamic> json) {
     return DacSan(
-      idDacSan: json['iddacsan'],
-      tenDacSan: json['tendacsan'],
-      avatar: json['avatar'],
-      moTa: json['mota'],
-      thanhPhan: json['thanhphan'],
-      xuatXu: json['xuatxu'],
-      idMien: json['idmien'],
-      loaiDacSan: json['loaidacsan'],
+      idDacSan: json['IDDacSan'],
+      tenDS: json['TenDS'],
+      moTa: json['MoTa'],
+      sao: json['Sao'],
+      avatar: json['Avatar'],
+      trangThai: json['TrangThai'],
+      idLoaiDS: json['IDLoaiDS'],
+      idTinh: json['IDTinh'],
     );
   }
 }

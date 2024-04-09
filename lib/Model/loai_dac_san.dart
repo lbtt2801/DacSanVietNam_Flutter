@@ -1,16 +1,19 @@
 class LoaiDacSan {
-  int idLoai;
-  String tenLoai;
+  String idLoaiDS ;
+  String tenLoaiDS;
+  String moTa;
 
   LoaiDacSan({
-    required this.idLoai,
-    required this.tenLoai
+    required this.idLoaiDS,
+    required this.tenLoaiDS,
+    required this.moTa,
   });
 
   factory LoaiDacSan.fromJson(Map<String, dynamic> json) {
     return LoaiDacSan(
-      idLoai: json['idloai'],
-      tenLoai: json['tenloai'],
+      idLoaiDS: json['IDLoaiDS'],
+      tenLoaiDS: json['TenLoaiDS'],
+        moTa: json['MoTa'],
     );
   }
 }

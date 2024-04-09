@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:vinaFoods/Service/thu_vien_api.dart';
+import 'package:vinaFoods/main.dart';
 
 class RatingWidget extends StatefulWidget {
   const RatingWidget({super.key});
@@ -47,6 +49,10 @@ class _RatingWidgetState extends State<RatingWidget> {
               onPressed: rating > 0.0
                   ? () {
                       // Xử lý lưu đánh giá và nội dung
+                      setState(() {
+                        getCommentsFollowIDDacSan(3);
+                      });
+
                       print('Rating: $rating');
                       print('Review: ${reviewController.text}');
                     }

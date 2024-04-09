@@ -2,14 +2,15 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart';
+import 'package:vinaFoods/Service/thu_vien_api.dart';
 import 'package:vinaFoods/Widget/RatingBar.dart';
 import 'package:vinaFoods/Widget/Review.dart';
 
 import '../Model/vung_mien.dart';
+import '../Model/comment.dart';
 import '../Widget/ButtonSave.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
@@ -27,7 +28,6 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   @override
   Widget build(BuildContext context) {
     bool isCheck = false;
-
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -52,7 +52,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
               padding: const EdgeInsets.only(
                 left: 15,
               ),
-              child: Text(dsDacSan[widget.maDS - 1].tenDacSan ?? '',
+              child: Text(dsDacSan[widget.maDS - 1].tenDS ?? '',
                   style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       color: Colors.teal,
@@ -74,11 +74,12 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                   ),
                   onPressed: () {
                     context.push(
-                        "/dacsan/vungmien/${dsDacSan[widget.maDS - 1].idMien}");
+                        "/dacsan/vungmien/${dsDacSan[widget.maDS - 1].idTinh}");
                   },
-                  child: Text(
-                      "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idMien)}",
-                      style: const TextStyle(
+                  child: const Text(
+                      // "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idTinh)}",
+                      "Đặc sản",
+                      style: TextStyle(
                           fontWeight: FontWeight.w900,
                           color: Colors.amber,
                           fontSize: 24,
@@ -102,9 +103,9 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
               height: 230,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      getHinhAnhDS(dsDacSan[widget.maDS - 1].idDacSan ?? 0)
-                          .length,
+                  itemCount: getHinhAnhDS(dsDacSan[widget.maDS - 1].idDacSan ??
+                          'https://babettesonline.com/images/thumbs/default-image_1200.png')
+                      .length,
                   // itemCount: 10,
                   itemBuilder: (context, index) {
                     return Container(
@@ -120,7 +121,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                               MaterialPageRoute(
                                   builder: (context) => xemHinh(getHinhAnhDS(
                                       dsDacSan[widget.maDS - 1].idDacSan ??
-                                          0)[index])),
+                                          '')[index])),
                             );
                           },
                           child: Hero(
@@ -128,7 +129,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                             child: Image.network(
                                 getHinhAnhDS(
                                     dsDacSan[widget.maDS - 1].idDacSan ??
-                                        0)[index],
+                                        '0')[index],
                                 fit: BoxFit.cover,
                                 width:
                                     double.infinity, // Đặt chiều rộng mong muốn
@@ -180,25 +181,25 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       fontSize: 28,
                       fontFamily: "RobotoBlack")),
             ),
-            Card(
-                color: const Color.fromARGB(255, 242, 242, 242),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(8.0),
-                  child: SelectableText(
-                      dsDacSan[widget.maDS - 1].thanhPhan ?? '',
-                      textDirection: TextDirection.ltr,
-                      textAlign: TextAlign.justify,
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'RobotoLight',
-                          wordSpacing: 1.3,
-                          letterSpacing: 0.1,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900)),
-                )),
+            // Card(
+            //     color: const Color.fromARGB(255, 242, 242, 242),
+            //     shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(5)),
+            //     child: Container(
+            //       width: double.infinity,
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: SelectableText(
+            //           dsDacSan[widget.maDS - 1].thanhPhan ?? '',
+            //           textDirection: TextDirection.ltr,
+            //           textAlign: TextAlign.justify,
+            //           style: const TextStyle(
+            //               fontSize: 18,
+            //               fontFamily: 'RobotoLight',
+            //               wordSpacing: 1.3,
+            //               letterSpacing: 0.1,
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.w900)),
+            //     )),
             const SizedBox(height: 25),
             const Padding(
               padding: EdgeInsets.only(
@@ -250,14 +251,14 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                 child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8.0),
-                    child: ReviewsList())),
+                    child: ReviewsList(reviews: dsComment))),
           ],
         ),
       ),
     );
   }
 
-  List<String> getHinhAnhDS(int idDacSan) {
+  List<String> getHinhAnhDS(String idDacSan) {
     List<String> ds = [];
     for (var ha in dsHinhAnh) {
       if (ha.idDacSan == idDacSan) {
@@ -279,7 +280,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
     setState(() {});
   }
 
-  String getURLImage(int? idImage) {
+  String getURLImage(String? idImage) {
     //// cai nay dung duoc
     String url = 'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png';
     int index = dsHinhAnh.indexWhere(
@@ -290,11 +291,11 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
     return url;
   }
 
-  String getMien(int? IdMien) {
+  String getMien(String? IdMien) {
     String name = '404';
-    int index = dsVungMien.indexWhere((vungMien) => vungMien.idMien == IdMien);
+    int index = dsVungMien.indexWhere((vungMien) => vungMien.idVung == IdMien);
     if (index != -1) {
-      return dsVungMien[index].tenMien.toString();
+      return dsVungMien[index].tenVung.toString();
     }
     return name;
   }

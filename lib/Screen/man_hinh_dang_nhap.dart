@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
+import 'package:vinaFoods/Service/thu_vien_api.dart';
 
 import '../Model/nguoi_dung.dart';
 import '../Screen/man_hinh_dang_ky.dart';
@@ -167,7 +168,7 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
                     side: const BorderSide(
                         width: 1, color: Colors.lightBlueAccent),
                   ),
-                  onPressed: () => context.go("/signup"),
+                  onPressed: () => {getTinhThanh(), context.go("/signup")},
                   child: const Text("Đăng ký")),
               VerticalGapSizedBox(),
               Row(

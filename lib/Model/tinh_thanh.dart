@@ -1,17 +1,26 @@
 class TinhThanh
 {
-  int? maTT;
-  String? ten;
+  String? idTinh;
+  String? tenTinh;
+  String? gioiThieu;
+  String? linkAnh;
+  String? idVung;
 
   TinhThanh({
-    this.maTT,
-    this.ten,
+    this.idTinh,
+    this.tenTinh,
+    this.gioiThieu,
+    this.linkAnh,
+    this.idVung,
   });
 
   factory TinhThanh.fromJson(Map<String, dynamic> json) {
     return TinhThanh(
-      maTT: json['idtinh'],
-      ten: json['tentinh'],
+      idTinh: json['IDTinh'],
+      tenTinh: json['TenTinh'],
+      gioiThieu: json['GioiThieu'],
+      linkAnh: json['LinkAnh'],
+      idVung: json['IDVung'],
     );
   }
 }

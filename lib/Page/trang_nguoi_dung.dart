@@ -123,13 +123,13 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                       },
                       onChanged: (value) {
                         if (value != null) {
-                          widget.diaChiController.text = value.ten!;
+                          widget.diaChiController.text = value.tenTinh!;
                         }
                       },
                       selectedItem: dsTinhThanh[0],
                       items: dsTinhThanh,
                       itemAsString: (value) {
-                        return value.ten!;
+                        return value.tenTinh!;
                       },
                     ),
                   ),

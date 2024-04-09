@@ -23,11 +23,11 @@ class TrangDacSanTheoVung extends StatefulWidget {
 class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
   List<DacSan> lstDacSan = [];
   List<DacSan> filteredDacSan = [];
-  String selectedChip = dsLoaiDacSan[0].tenLoai;
+  String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
 
   void selectChip(LoaiDacSan chip) {
     setState(() {
-      selectedChip = chip.tenLoai;
+      selectedChip = chip.tenLoaiDS;
     });
   }
 
@@ -35,9 +35,9 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
   void initState() {
     super.initState();
     lstDacSan =
-        dsDacSan.where((dacSan) => dacSan.idMien == widget.maVung).toList();
+        dsDacSan.where((dacSan) => dacSan.idTinh == widget.maVung).toList();
     filteredDacSan = lstDacSan
-        .where((dacSan) => dacSan.loaiDacSan == dsLoaiDacSan[0].idLoai)
+        .where((dacSan) => dacSan.idLoaiDS == dsLoaiDacSan[0].idLoaiDS)
         .toList();
   }
 
@@ -68,7 +68,7 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                           vertical: 10,
                         ),
                         title: Text(
-                          dacSan.tenDacSan!,
+                          dacSan.tenDS!,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -76,9 +76,9 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Thành phần: ${dacSan.thanhPhan!}",
+                            Text("Thành phần: ${dacSan.moTa!}",
                                 maxLines: 1, overflow: TextOverflow.ellipsis),
-                            Text('Xuất xứ: ${getTenTinh(dacSan.xuatXu)}'),
+                            // Text('Xuất xứ: ${getTenTinh(dacSan.xuatXu)}'),
                           ],
                         ),
                         leading: Padding(
@@ -127,7 +127,7 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: dsLoaiDacSan.map((loaiDacSan) {
-                  bool isSelected = loaiDacSan.tenLoai == selectedChip;
+                  bool isSelected = loaiDacSan.tenLoaiDS == selectedChip;
                   return AnimatedContainer(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 15,
@@ -136,7 +136,7 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                     curve: Curves.easeInOut,
                     child: FilterChip(
                       label: Text(
-                        loaiDacSan.tenLoai,
+                        loaiDacSan.tenLoaiDS,
                         style: TextStyle(
                           color: isSelected
                               ? Colors.white
@@ -148,7 +148,7 @@ class _TrangDacSanTheoVungState extends State<TrangDacSanTheoVung> {
                         selectChip(loaiDacSan);
                         filteredDacSan = lstDacSan
                             .where((dacSan) =>
-                                dacSan.loaiDacSan == loaiDacSan.idLoai)
+                                dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
                             .toList();
                       },
                       selectedColor: Colors.blue,

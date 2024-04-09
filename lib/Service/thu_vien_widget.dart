@@ -23,7 +23,7 @@ Widget LoadingScreen() {
   );
 }
 
-CachedNetworkImage cachedImage(int id) {
+CachedNetworkImage cachedImage(String id) {
   return CachedNetworkImage(
     progressIndicatorBuilder: (context, url, downloadProgress) =>
         LinearProgressIndicator(value: downloadProgress.progress),

@@ -29,21 +29,21 @@ class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
     // TODO: implement initState
     if (widget.ten != null) {
       dsDacSanDaLoc = dsDacSanDaLoc
-          .where((element) => element.tenDacSan!
+          .where((element) => element.tenDS!
               .toLowerCase()
               .contains(widget.ten!.toLowerCase()))
           .toList();
     }
     if (widget.thanhPhan != null) {
       dsDacSanDaLoc = dsDacSanDaLoc
-          .where((element) => element.thanhPhan!
+          .where((element) => element.moTa!
               .toLowerCase()
               .contains(widget.thanhPhan!.toLowerCase()))
           .toList();
     }
     if (widget.xuatSu != null) {
       dsDacSanDaLoc = dsDacSanDaLoc
-          .where((element) => element.xuatXu! == widget.xuatSu)
+          .where((element) => element.idTinh! == widget.xuatSu)
           .toList();
     }
     if (widget.noiBat != null) {
@@ -79,7 +79,7 @@ class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
                 ),
               ),
               title: Text(
-                dsDacSanDaLoc[index].tenDacSan!,
+                dsDacSanDaLoc[index].tenDS!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -87,8 +87,8 @@ class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Thành phần: ${dsDacSanDaLoc[index].thanhPhan!}"),
-                  Text('Xuất xứ: ${getTenTinh(dsDacSanDaLoc[index].xuatXu)}'),
+                  Text("Thành phần: ${dsDacSanDaLoc[index].moTa!}"),
+                  Text('Xuất xứ: ${getTenTinh(dsDacSanDaLoc[index].idTinh)}'),
                 ],
               ),
               leading: Padding(

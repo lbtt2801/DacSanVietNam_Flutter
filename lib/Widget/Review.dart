@@ -1,67 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:vinaFoods/Service/thu_vien_api.dart';
 
-class Review {
-  String username;
-  double rating;
-  String content;
+import '../Model/comment.dart';
 
-  Review({required this.username, required this.rating, required this.content});
+class ReviewsList extends StatefulWidget {
+  final List<Comment> reviews;
+
+  const ReviewsList({Key? key, required this.reviews}) : super(key: key);
+
+  @override
+  _ReviewsListState createState() => _ReviewsListState();
 }
 
-class ReviewsList extends StatelessWidget {
-  List<Review> reviews = [
-    Review(
-      username: 'John',
-      rating: 4.5,
-      content: 'Great product!',
-    ),
-    Review(
-      username: 'Emily',
-      rating: 5.0,
-      content: 'Excellent service!',
-    ),
-    Review(
-      username: 'David',
-      rating: 3.0,
-      content: 'Average experience.',
-    ),
-  ];
+class _ReviewsListState extends State<ReviewsList> {
+  late List<String> nameUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    nameUsers = List<String>.filled(widget.reviews.length, 'null');
+    fetchUserNames();
+  }
+
+  void fetchUserNames() {
+    for (int i = 0; i < widget.reviews.length; i++) {
+      getNameUser(widget.reviews[i].idUser).then((name) {
+        setState(() {
+          nameUsers[i] = name;
+        });
+      }).catchError((error) {
+        print(error);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70.0 * reviews.length, // Đặt chiều cao cố định cho Container
+    return SizedBox(
+      height: 70.0 * widget.reviews.length,
       child: ListView.builder(
-        itemCount: reviews.length,
+        itemCount: widget.reviews.length,
         itemBuilder: (context, index) {
-          final review = reviews[index];
+          final review = widget.reviews[index];
+          final nameUser = nameUsers[index];
+
           return ListTile(
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text(review.username),
+                  child: Text(nameUser),
                 ),
                 RatingBar.builder(
                   itemSize: 20.0,
-                  initialRating: review.rating,
+                  initialRating: review.soSao.toDouble(),
                   minRating: 0,
                   maxRating: 5,
                   itemBuilder: (context, _) => const Icon(
                     Icons.star,
                     color: Colors.amber,
                   ),
-                  onRatingUpdate:(rating) {},
-                  ignoreGestures: true, // Ngăn người dùng tương tác
+                  onRatingUpdate: (rating) {},
+                  ignoreGestures: true,
                 ),
               ],
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 4.0),
-                Text(review.content),
+                const SizedBox(height: 4.0),
+                Text(review.trangThai),
               ],
             ),
           );

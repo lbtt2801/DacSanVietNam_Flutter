@@ -32,12 +32,12 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       () async {
         await getTinhThanh();
         await getHinhAnh();
-        await getVungMien();
-        await getLoaiDacSan();
-        await getDacSan();
-        await getDacSanVungMien();
-        await getDacSanNoiBat();
-        nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;
+        // await getVungMien();
+        // await getLoaiDacSan();
+        // await getDacSan();
+        // await getDacSanVungMien();
+        // await getDacSanNoiBat();
+        // nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;
         return "";
       },
     );
@@ -154,14 +154,14 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       },
       suggestionsCallback: (String pattern) {
         return dsDacSan
-            .where((element) => element.tenDacSan!
+            .where((element) => element.tenDS!
                 .toLowerCase()
                 .contains(pattern.toLowerCase()))
             .toList();
       },
       itemBuilder: (BuildContext context, item) {
         return ListTile(
-          title: Text(item.tenDacSan!),
+          title: Text(item.tenDS!),
         );
       },
       onSelected: (item) {

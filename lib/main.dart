@@ -8,9 +8,11 @@ import 'package:vinaFoods/Model/loai_dac_san.dart';
 import 'package:vinaFoods/Model/noi_bat.dart';
 import 'package:vinaFoods/Service/thu_vien_api.dart';
 
+import 'Model/comment.dart';
 import 'Model/dac_san.dart';
 import 'Model/hinh_anh.dart';
 import 'Model/nguoi_dung.dart';
+import 'Model/noi_ban.dart';
 import 'Model/tinh_thanh.dart';
 import 'Model/vung_mien.dart';
 import 'Router/router_config.dart';
@@ -19,12 +21,14 @@ late final SharedPreferences ref;
 List<VungMien> dsVungMien = [];
 List<HinhAnh> dsHinhAnh = [];
 List<TinhThanh> dsTinhThanh = [];
+List<NoiBan> dsNoiBan = [];
 List<DacSan> dsDacSan = [];
 List<DacSan> dsDacSanMienBac = [];
 List<DacSan> dsDacSanMienTrung = [];
 List<DacSan> dsDacSanMienNam = [];
 List<LoaiDacSan> dsLoaiDacSan = [];
 List<NoiBat> dsDacSanNoiBat = [];
+List<Comment> dsComment = [];
 late NguoiDung nguoiDung;
 
 Future<void> main() async {
@@ -38,7 +42,7 @@ Future<void> main() async {
           "https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app",
           projectId: "dacsanvietnam-6ee19",
           storageBucket: "dacsanvietnam-6ee19.appspot.com",
-          messagingSenderId: "132894885676",
+          messagingSenderId: "41890746519",
           appId: "1:41890746519:android:e985a7d3cee3b3e61199d2",
           measurementId: "G-ES189ZW8QH"));
 

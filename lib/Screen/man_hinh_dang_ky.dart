@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart';
+import 'package:vinaFoods/main.dart';
 
 import '../Model/tinh_thanh.dart';
 import '../Screen/man_hinh_cho_xac_nhan.dart';
@@ -37,7 +38,6 @@ class ManHinhDangKy extends StatefulWidget {
 }
 
 class _ManHinhDangKyState extends State<ManHinhDangKy> {
-  List<TinhThanh> dsTT = [];
   bool isNam = true;
   bool hidePassword = true;
   String? tinhThanh;
@@ -46,8 +46,6 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
 
   @override
   void initState() {
-    xemTinhThanh();
-
     if (widget.uid != null) {
       isPasswordReadOnly = true;
     }
@@ -62,9 +60,10 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
   @override
   Widget build(BuildContext context) {
     final List<String> dsLabelTinhThanh = [];
-    for (var tinhThanh in dsTT) {
+    print(dsTinhThanh.length);
+    for (var tinhThanh in dsTinhThanh) {
       dsLabelTinhThanh.add(
-        tinhThanh.ten!,
+        tinhThanh.tenTinh!,
       );
     }
 
@@ -217,12 +216,12 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                 },
                 onChanged: (value) {
                   if (value != null) {
-                    tinhThanh = value.ten!;
+                    tinhThanh = value.tenTinh!;
                   }
                 },
-                items: dsTT,
+                items: dsTinhThanh,
                 itemAsString: (value) {
-                  return value.ten!;
+                  return value.tenTinh!;
                 },
               ),
               VerticalGapSizedBox(),
@@ -357,17 +356,5 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
         ),
       ),
     );
-  }
-
-  Future<void> xemTinhThanh() async {
-    var reponse = await get(Uri.parse(
-        'https://cntt199.000webhostapp.com/getTinhThanh.php')); //https://cntt199.000webhostapp.com/getTinhThanh.php //https://provinces.open-api.vn/api/?depth=1
-    var result = json.decode(utf8.decode(reponse.bodyBytes));
-
-    for (var document in result) {
-      TinhThanh tinhThanh = TinhThanh.fromJson(document);
-      dsTT.add(tinhThanh);
-    }
-    setState(() {});
   }
 }

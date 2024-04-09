@@ -23,7 +23,7 @@ class TrangDacSan extends StatefulWidget {
 }
 
 class _TrangDacSanState extends State<TrangDacSan> {
-  String selectedChip = dsLoaiDacSan[0].tenLoai;
+  String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
   List<DacSan> lstDacSan = dsDacSan;
 
   String Address = ' 👈 Lấy vị trí hiện tại';
@@ -63,7 +63,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
 
   void selectChip(LoaiDacSan chip) {
     setState(() {
-      selectedChip = chip.tenLoai;
+      selectedChip = chip.tenLoaiDS;
     });
   }
 
@@ -89,13 +89,13 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   IconButton(
                     style: ButtonStyle(
                         maximumSize:
-                        MaterialStateProperty.all(const Size(40, 40))),
+                            MaterialStateProperty.all(const Size(40, 40))),
                     onPressed: () async {
                       getUserAddress();
                     },
                     icon: LoadHinh("assets/images/ic_location.png"),
                   ),
-                  Text( Address.toString(),
+                  Text(Address.toString(),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.lightBlue,
@@ -112,10 +112,10 @@ class _TrangDacSanState extends State<TrangDacSan> {
                 ),
                 items: buildBanner(5),
               ),
-              buildDacSanNoiBat(),
+              // buildDacSanNoiBat(),
               headerLoaiDacSan(),
               Column(
-                children: buildDanhSachDacSan(),
+                // children: buildDanhSachDacSan(),
               )
             ],
           ),
@@ -124,58 +124,58 @@ class _TrangDacSanState extends State<TrangDacSan> {
     );
   }
 
-  List<Widget> buildDanhSachDacSan() {
-    List<Widget> dsWidget = [];
-    dsWidget = dsVungMien.map((vungMien) {
-      return buildRowDacSan(vungMien);
-    }).toList();
-    return dsWidget;
-  }
+  // List<Widget> buildDanhSachDacSan() {
+  //   List<Widget> dsWidget = [];
+  //   dsWidget = dsVungMien.map((vungMien) {
+  //     return buildRowDacSan(vungMien);
+  //   }).toList();
+  //   return dsWidget;
+  // }
 
-  Column buildRowDacSan(VungMien vungMien) {
-    return Column(
-      children: [
-        headerVungMien(vungMien),
-        DacSanList(
-            lstDacSan: lstDacSan
-                .where((dacSan) => dacSan.idMien == vungMien.idMien)
-                .toList()),
-      ],
-    );
-  }
+  // Column buildRowDacSan(VungMien vungMien) {
+  //   return Column(
+  //     children: [
+  //       headerVungMien(vungMien),
+  //       DacSanList(
+  //           lstDacSan: lstDacSan
+  //               .where((dacSan) => dacSan.idMien == vungMien.idMien)
+  //               .toList()),
+  //     ],
+  //   );
+  // }
 
-  Column buildDacSanNoiBat() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: TextButton(
-            onPressed: () {
-              context.goNamed(
-                "timKiem",
-                queryParameters: {"noiBat": "true"},
-              );
-            },
-            child: const Text("Những đặc sản Việt Nam bạn không thể bỏ qua",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.lightBlue,
-                )),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: 10,
-          ),
-          child: DacSanList(
-              lstDacSan: lstDacSan
-                  .where((dacSan) => dsDacSanNoiBat
-                      .any((element) => element.idDacSan == dacSan.idDacSan))
-                  .toList()),
-        ),
-      ],
-    );
-  }
+  // Column buildDacSanNoiBat() {
+  //   return Column(
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.all(10.0),
+  //         child: TextButton(
+  //           onPressed: () {
+  //             context.goNamed(
+  //               "timKiem",
+  //               queryParameters: {"noiBat": "true"},
+  //             );
+  //           },
+  //           child: const Text("Những đặc sản Việt Nam bạn không thể bỏ qua",
+  //               style: TextStyle(
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Colors.lightBlue,
+  //               )),
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.only(
+  //           bottom: 10,
+  //         ),
+  //         child: DacSanList(
+  //             lstDacSan: lstDacSan
+  //                 .where((dacSan) => dsDacSanNoiBat
+  //                     .any((element) => element.idDacSan == dacSan.idDacSan))
+  //                 .toList()),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   List<Widget> buildBanner(int limit) {
     List<Widget> dsWidget = [];
@@ -242,7 +242,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: dsLoaiDacSan.map((loaiDacSan) {
-                  bool isSelected = loaiDacSan.tenLoai == selectedChip;
+                  bool isSelected = loaiDacSan.tenLoaiDS == selectedChip;
                   return AnimatedContainer(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 15,
@@ -251,7 +251,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                     curve: Curves.easeInOut,
                     child: FilterChip(
                       label: Text(
-                        loaiDacSan.tenLoai,
+                        loaiDacSan.tenLoaiDS,
                         style: TextStyle(
                           color: isSelected
                               ? Colors.white
@@ -263,7 +263,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                         selectChip(loaiDacSan);
                         lstDacSan = dsDacSan
                             .where((dacSan) =>
-                                dacSan.loaiDacSan == loaiDacSan.idLoai)
+                                dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
                             .toList();
                       },
                       selectedColor: Colors.blue,
@@ -284,7 +284,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
       padding: const EdgeInsets.all(10.0),
       child: Row(
         children: <Widget>[
-          Text(vungMien.tenMien!,
+          Text(vungMien.tenVung!,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.lightBlue,
@@ -296,7 +296,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
               //   "timKiem",
               //   queryParameters: {"ten": "Mì"},
               // );
-              context.go("/dacsan/vungmien/${vungMien.idMien}");
+              context.go("/dacsan/vungmien/${vungMien.idVung}");
             },
             child: const Text("Xem thêm",
                 style: TextStyle(
@@ -328,8 +328,10 @@ class DacSanList extends StatelessWidget {
               itemCount: lstDacSan.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                  onTap: () => context
-                      .go("/dacsan/chitiet/${lstDacSan[index].idDacSan}"),
+                  onTap: () => {
+                    getCommentsFollowIDDacSan(1),
+                    context.go("/dacsan/chitiet/${lstDacSan[index].idDacSan}"),
+                  },
                   child: Card(
                     margin: const EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
@@ -348,13 +350,13 @@ class DacSanList extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          Text(lstDacSan[index].tenDacSan!,
+                          Text(lstDacSan[index].tenDS!,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               )),
                           Text(
-                            'Xuất xứ: ${getTenTinh(lstDacSan[index].xuatXu)}',
+                            'Xuất xứ: ${getTenTinh(lstDacSan[index].idTinh)}',
                           ),
                         ],
                       ),

@@ -1,17 +1,20 @@
 class VungMien
 {
-  int? idMien;
-  String? tenMien;
+  String? idVung;
+  String? tenVung;
+  String? mien;
 
   VungMien({
-    this.idMien,
-    this.tenMien,
+    this.idVung,
+    this.tenVung,
+    this.mien,
   });
 
   factory VungMien.fromJson(Map<String, dynamic> json) {
     return VungMien(
-      idMien: json['idmien'],
-      tenMien: json['tenmien'],
+      idVung: json['IDVung'],
+      tenVung: json['TenVung'],
+      mien: json['Mien'],
     );
   }
 }

@@ -1,7 +1,7 @@
 class NguoiDung {
   String uid;
-  String email;
   String hoTen;
+  String email;
   String gioiTinh;
   String? diaChi;
 
@@ -15,11 +15,11 @@ class NguoiDung {
 
   factory NguoiDung.fromJson(Map<String, dynamic> json) {
     return NguoiDung(
-      uid: json['uid'],
-      email: json['email'],
-      gioiTinh: json['gioitinh'],
-      hoTen: json['hoten'],
-      diaChi: json['diachi'],
+      uid: json['IDUsers'],
+      email: json['Email'],
+      gioiTinh: json['GioiTinh'],
+      hoTen: json['Ten'],
+      diaChi: json['Tinh'],
     );
   }
 }

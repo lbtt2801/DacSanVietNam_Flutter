@@ -1,7 +1,7 @@
 class NoiBat
 {
-  int? idNoiBat;
-  int? idDacSan;
+  String? idNoiBat;
+  String? idDacSan;
 
   NoiBat({
     this.idNoiBat,
