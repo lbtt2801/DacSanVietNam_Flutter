@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +20,7 @@ import 'Router/router_config.dart';
 
 late final SharedPreferences ref;
 List<Vung> dsVungMien = [];
+List<NguoiDung> dsNguoiDung = [];
 List<HinhAnh> dsHinhAnh = [];
 List<TinhThanh> dsTinhThanh = [];
 List<NoiBan> dsNoiBan = [];

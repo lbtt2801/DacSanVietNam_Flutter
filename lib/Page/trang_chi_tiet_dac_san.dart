@@ -94,8 +94,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                         getTinhTuID(dacSan.idTinh),
                         style: const TextStyle(
                             fontWeight: FontWeight.w900,
-                            color: Colors.amber,
-                            fontSize: 24,
+                            color: Color.fromARGB(200, 255, 112, 10),
+                            fontSize: 28,
                             fontFamily: 'ExtraBoldItalic')),
                   ),
                   Spacer(),
@@ -109,12 +109,12 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   starNumber(dacSan.sao!),
-                  SizedBox(width: 8),
+                  SizedBox(width: 10),
                   Card(
                     margin: EdgeInsets.only(bottom: 4),
                     borderOnForeground: isCheck,
                     child: Padding(
-                      padding: const EdgeInsets.all(3.0),
+                      padding: const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 1),
                       child: Text(
                         dacSan.sao!.toString(),
                         style: const TextStyle(
@@ -290,8 +290,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                     borderRadius: BorderRadius.circular(5)),
                 child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(8.0),
-                    child: ReviewsList(reviews: dsComment))),
+                    padding: const EdgeInsets.all(1.0),
+                    child: ReviewsList(idDacSan: dacSan.idDacSan!))),
           ],
         ),
       ),

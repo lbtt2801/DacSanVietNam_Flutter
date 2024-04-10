@@ -50,18 +50,19 @@ Future<void> updateUser(
   await post(url, body: data);
 }
 
-Future<NguoiDung?> getUser(String uid) async {
-  List<NguoiDung> dsNguoiDung = [];
-
+Future<NguoiDung?> getDSUser() async {
   var reponse = await get(
-      Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getUsers.php'));
+      Uri.parse(
+          'https://truyentranhandriod.000webhostapp.com/api/getUsers.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
     NguoiDung nguoiDung = NguoiDung.fromJson(document);
     dsNguoiDung.add(nguoiDung);
   }
+}
 
+Future<NguoiDung?> getUser(String uid) async {
   for (var nd in dsNguoiDung) {
     if (nd.uid == uid) {
       return nd;
@@ -127,11 +128,7 @@ Future<void> getComment() async {
   }
 }
 
-Future<void> getDacSanVungMien() async {
-  // dsDacSanMienBac = dsDacSan.where((dacSan) => dacSan.idMien == 1).toList();
-  // dsDacSanMienTrung = dsDacSan.where((dacSan) => dacSan.idMien == 2).toList();
-  // dsDacSanMienNam = dsDacSan.where((dacSan) => dacSan.idMien == 3).toList();
-}
+
 
 List<DacSan> getDanhSachDacSanTheoTen(String ten) {
   List<DacSan> kq = [];
@@ -167,6 +164,8 @@ Future<List<Comment>> fetchCommentsById(int idDacSan) async {
     throw Exception('Failed to fetch comments');
   }
 }
+
+
 
 String? getDacSanTheoTen(String ten) {
   for (var dacSan in dsDacSan) {
@@ -222,6 +221,8 @@ Future<void> getTinhThanh() async {
   }
 }
 
+
+
 String getURLImage(String? idImage) {
   String url = 'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png';
   int index = dsHinhAnh
@@ -272,4 +273,10 @@ List<DacSan> getIDTuTenTinh(String? tenTinh) {
 String getTinhTuID(String? idTinh) {
   TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.idTinh == idTinh);
   return IDTinh.tenTinh.toString();
+}
+
+// Lấy tên từ idUser
+String getTenUser(String? idUser) {
+  NguoiDung User = dsNguoiDung.firstWhere((ds) => ds.uid == idUser);
+  return User.hoTen;
 }
