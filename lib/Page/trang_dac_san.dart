@@ -47,7 +47,6 @@ class _TrangDacSanState extends State<TrangDacSan> {
     try {
       List<Placemark> placemarks =
       await placemarkFromCoordinates(position.latitude, position.longitude);
-
       if (placemarks.isNotEmpty) {
         setState(() {
           Address = placemarks.first.administrativeArea!;

@@ -30,7 +30,7 @@ class _RatingWidgetState extends State<RatingWidget> {
               initialRating: rating,
               minRating: 0,
               direction: Axis.horizontal,
-              allowHalfRating: true,
+              allowHalfRating: false,
               itemCount: 5,
               itemSize: 40.0,
               unratedColor: Colors.grey,
@@ -63,7 +63,7 @@ class _RatingWidgetState extends State<RatingWidget> {
         ),
         TextField(
           controller: reviewController,
-          maxLength: 150,
+          maxLength: 200,
           maxLines: 2,
           decoration: InputDecoration(
             hintText: 'Nhập nội dung đánh giá',

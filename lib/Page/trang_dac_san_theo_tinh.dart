@@ -10,6 +10,8 @@ import '../Model/loai_dac_san.dart';
 import '../Service/thu_vien_api.dart';
 import '../Service/thu_vien_widget.dart';
 import '../main.dart';
+import '../Widget/ShowStar.dart';
+
 
 class TrangDacSanTheoTinh extends StatefulWidget {
   final String maTinh;
@@ -71,19 +73,15 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        subtitle: const Row(
+                        subtitle: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("5",
-                                style: TextStyle(fontSize: 20),
-                                maxLines: 1, overflow: TextOverflow.ellipsis),
-                            // Text('Xuất xứ: ${getTenTinh(dacSan.xuatXu)}'),
-                            Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 27,
-                              weight: 10,
-                            )
+                            Text(
+                                dacSan.sao!.toString(),
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(width: 6),
+                            starNumber(dacSan.sao!),
                           ],
                         ),
                         leading: Padding(

@@ -15,6 +15,7 @@ import '../Model/comment.dart';
 import '../Widget/ButtonSave.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
+import '../Widget/ShowStar.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final String maDS;
@@ -51,7 +52,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                   child: Image.network(
                     dacSan.avatar ?? 'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png',
                     width: double.infinity,
-                    fit: BoxFit.fitWidth,
+                    height: 240,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -106,17 +108,23 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      dacSan.sao.toString(),
-                      style: TextStyle(fontSize: 20),
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
-                  // Text('Xuất xứ: ${getTenTinh(dacSan.xuatXu)}'),
-                  const Icon(
-                    Icons.star,
-                    color: Colors.yellow,
-                    size: 27,
-                    weight: 10,
-                  )
+                  starNumber(dacSan.sao!),
+                  SizedBox(width: 8),
+                  Card(
+                    margin: EdgeInsets.only(bottom: 4),
+                    borderOnForeground: isCheck,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(
+                        dacSan.sao!.toString(),
+                        style: const TextStyle(
+                            fontSize: 22,
+                            color: Colors.amber,
+                            fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -332,3 +340,5 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
     return name;
   }
 }
+
+

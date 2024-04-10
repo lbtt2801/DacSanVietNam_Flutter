@@ -1,5 +1,6 @@
 class Comment {
   final double soSao;
+  final String noiDung;
   final String thoiGian;
   final String trangThai;
   final String idDacSan;
@@ -7,6 +8,7 @@ class Comment {
 
   Comment({
     required this.soSao,
+    required this.noiDung,
     required this.thoiGian,
     required this.trangThai,
     required this.idDacSan,
@@ -15,7 +17,8 @@ class Comment {
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
-      soSao: json['SoSao'],
+      soSao:  double.parse(json['SoSao']),
+      noiDung: json['NoiDung'],
       thoiGian: json['ThoiGian'],
       trangThai: json['TrangThai'],
       idDacSan: json['IDDacSan'],

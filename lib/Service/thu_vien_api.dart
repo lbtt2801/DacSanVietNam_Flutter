@@ -16,14 +16,14 @@ import '../main.dart';
 Future<void> addUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {
   Map<String, dynamic> data = {
-    'uid': uid,
-    'email': email,
-    'hoten': hoTen,
-    'gioitinh': isNam ? "Nam" : "Nữ",
-    'diachi': diaChi,
+    'IDUsers': "uid",
+    'Email': "email",
+    'Ten': "hoTen",
+    'GioiTinh': isNam ? "Nam" : "Nữ",
+    'Tinh': "diaChi",
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/registerUser.php');
+  var url = Uri.parse('https://truyentranhandriod.000webhostapp.com/api/registerUser.php');
   await post(url, body: data);
 }
 
@@ -113,6 +113,17 @@ Future<void> getDacSanNoiBat() async {
   for (var document in result) {
     NoiBat noiBat = NoiBat.fromJson(document);
     dsDacSanNoiBat.add(noiBat);
+  }
+}
+
+Future<void> getComment() async {
+  var reponse =
+  await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getCommentAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
+  var result = json.decode(utf8.decode(reponse.bodyBytes));
+
+  for (var document in result) {
+    Comment comment = Comment.fromJson(document);
+    dsComment.add(comment);
   }
 }
 
