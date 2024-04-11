@@ -4,7 +4,6 @@ import 'package:vinaFoods/Model/dac_san.dart';
 import 'package:vinaFoods/Service/thu_vien_api.dart';
 import 'package:vinaFoods/main.dart';
 
-
 import '../Model/comment.dart';
 
 class ReviewsList extends StatefulWidget {
@@ -23,7 +22,8 @@ class _ReviewsListState extends State<ReviewsList> {
   void initState() {
     super.initState();
 
-    listComment = dsComment.where((cm) => cm.idDacSan == widget.idDacSan).toList();
+    listComment =
+        dsComment.where((cm) => cm.idDacSan == widget.idDacSan).toList();
     // fetchUserNames();
   }
 
@@ -53,19 +53,17 @@ class _ReviewsListState extends State<ReviewsList> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  review.thoiGian,
-                  style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15,
-                      fontStyle:  FontStyle.italic),
-                    textAlign: TextAlign.start
-                ),
+                Text(review.thoiGian,
+                    style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                        fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.start),
                 Row(
                   children: [
                     Expanded(
                       child: Text(
-                          getTenUser(review.idUser),
+                        getTenUser(review.idUser) ?? 'Guest',
                         style: const TextStyle(
                             color: Color.fromARGB(255, 255, 112, 10),
                             fontWeight: FontWeight.bold),

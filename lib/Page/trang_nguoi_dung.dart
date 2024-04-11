@@ -30,14 +30,17 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
   bool isReadOnly = true;
   String updateText = "Cập nhật thông tin";
   bool isNam = true;
+  int indexTinh = 0;
 
   @override
   void initState() {
     widget.uidController.text = FirebaseAuth.instance.currentUser!.uid;
-    widget.emailController.text = nguoiDung.email;
-    widget.hoTenController.text = nguoiDung.hoTen;
+    widget.emailController.text = nguoiDung.email!;
+    widget.hoTenController.text = nguoiDung.hoTen!;
     widget.diaChiController.text = nguoiDung.diaChi!;
     isNam = nguoiDung.gioiTinh == "Nam";
+    String numericString = nguoiDung.diaChi!.replaceAll(RegExp(r'[^0-9]'), '');
+    indexTinh = int.parse(numericString) - 1;
     super.initState();
   }
 
@@ -123,10 +126,10 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                       },
                       onChanged: (value) {
                         if (value != null) {
-                          widget.diaChiController.text = value.tenTinh!;
+                          widget.diaChiController.text = value.idTinh!;
                         }
                       },
-                      selectedItem: dsTinhThanh[0],
+                      selectedItem: dsTinhThanh[indexTinh],
                       items: dsTinhThanh,
                       itemAsString: (value) {
                         return value.tenTinh!;

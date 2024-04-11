@@ -40,7 +40,7 @@ class ManHinhDangKy extends StatefulWidget {
 class _ManHinhDangKyState extends State<ManHinhDangKy> {
   bool isNam = true;
   bool hidePassword = true;
-  String? tinhThanh;
+  String tinhThanh = 'TINH035';
   bool isPasswordReadOnly = false;
   bool isEmailReadOnly = false;
 
@@ -223,7 +223,7 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                 },
                 onChanged: (value) {
                   if (value != null) {
-                    tinhThanh = value.tenTinh!;
+                    tinhThanh = value.idTinh!;
                   }
                 },
                 items: dsTinhThanh,
@@ -280,7 +280,7 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                               widget.emailController.text,
                               widget.hoTenController.text,
                               isNam,
-                              tinhThanh!,
+                              tinhThanh,
                             );
                             if (context.mounted) {
                               context.go("/");

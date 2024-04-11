@@ -17,10 +17,10 @@ class Comment {
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
-      soSao:  double.parse(json['SoSao']),
+      soSao:  double.parse(json['SoSao'].toString()),
       noiDung: json['NoiDung'],
       thoiGian: json['ThoiGian'],
-      trangThai: json['TrangThai'],
+      trangThai: json['TrangThai'].toString(),
       idDacSan: json['IDDacSan'],
       idUser: json['IDUsers'],
     );

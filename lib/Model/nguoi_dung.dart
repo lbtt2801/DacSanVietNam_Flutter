@@ -1,8 +1,8 @@
 class NguoiDung {
   String uid;
-  String hoTen;
-  String email;
-  String gioiTinh;
+  String? hoTen;
+  String? email;
+  String? gioiTinh;
   String? diaChi;
 
   NguoiDung({
@@ -10,7 +10,7 @@ class NguoiDung {
     required this.email,
     required this.hoTen,
     required this.gioiTinh,
-    this.diaChi,
+    required this.diaChi,
   });
 
   factory NguoiDung.fromJson(Map<String, dynamic> json) {
@@ -19,7 +19,7 @@ class NguoiDung {
       email: json['Email'],
       gioiTinh: json['GioiTinh'],
       hoTen: json['Ten'],
-      diaChi: json['Tinh'],
+      diaChi: json['IDTinh'],
     );
   }
 }

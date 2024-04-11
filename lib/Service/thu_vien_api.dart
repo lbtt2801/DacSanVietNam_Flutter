@@ -8,7 +8,6 @@ import '../Model/dac_san.dart';
 import '../Model/hinh_anh.dart';
 import '../Model/loai_dac_san.dart';
 import '../Model/nguoi_dung.dart';
-import '../Model/noi_bat.dart';
 import '../Model/tinh_thanh.dart';
 import '../Model/vung_mien.dart';
 import '../main.dart';
@@ -16,14 +15,14 @@ import '../main.dart';
 Future<void> addUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {
   Map<String, dynamic> data = {
-    'IDUsers': "uid",
-    'Email': "email",
-    'Ten': "hoTen",
+    'IDUsers': uid,
+    'Email': email,
+    'Ten': hoTen,
     'GioiTinh': isNam ? "Nam" : "Nữ",
-    'Tinh': "diaChi",
+    'IDTinh': diaChi,
   };
 
-  var url = Uri.parse('https://truyentranhandriod.000webhostapp.com/api/registerUser.php');
+  var url = Uri.parse('https://cntt199.000webhostapp.com/api/registerUser_OLD.php');
   await post(url, body: data);
 }
 
@@ -53,7 +52,7 @@ Future<void> updateUser(
 Future<NguoiDung?> getDSUser() async {
   var reponse = await get(
       Uri.parse(
-          'https://truyentranhandriod.000webhostapp.com/api/getUsers.php'));
+          'https://cntt199.000webhostapp.com/api/getUsers.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -68,13 +67,12 @@ Future<NguoiDung?> getUser(String uid) async {
       return nd;
     }
   }
-
   return null;
 }
 
 Future<void> getVung() async {
-  var reponse =
-      await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getVungAPI.php')); //https://cntt199.000webhostapp.com/getVungMien.php
+  var reponse = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getVungAPI.php')); //https://cntt199.000webhostapp.com/getVungMien.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -85,8 +83,8 @@ Future<void> getVung() async {
 
 Future<void> getLoaiDacSan() async {
   dsLoaiDacSan.insert(0, LoaiDacSan(idLoaiDS: 'all', tenLoaiDS: 'Tất cả'));
-  var reponse = await get(
-      Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getLoaiDacSan.php')); //https://cntt199.000webhostapp.com/getLoaiDacSan.php
+  var reponse = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getLoaiDacSan.php')); //https://cntt199.000webhostapp.com/getLoaiDacSan.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -96,8 +94,8 @@ Future<void> getLoaiDacSan() async {
 }
 
 Future<void> getDacSan() async {
-  var reponse =
-      await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getDacSanAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
+  var reponse = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getDacSanAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -106,20 +104,9 @@ Future<void> getDacSan() async {
   }
 }
 
-Future<void> getDacSanNoiBat() async {
-  var reponse = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/getDacSanNoiBat.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
-
-  for (var document in result) {
-    NoiBat noiBat = NoiBat.fromJson(document);
-    dsDacSanNoiBat.add(noiBat);
-  }
-}
-
 Future<void> getComment() async {
-  var reponse =
-  await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getCommentAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
+  var reponse = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getCommentAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -143,12 +130,12 @@ List<DacSan> getDanhSachDacSanTheoTen(String ten) {
 
 List<Comment> getCommentsFollowIDDacSan(int idDacSan) {
   List<Comment> kq = [];
-    fetchCommentsById(idDacSan).then((comments) {
-      dsComment = comments;
-      kq = comments;
-    }).catchError((error) {
-      print(error);
-    });
+  fetchCommentsById(idDacSan).then((comments) {
+    dsComment = comments;
+    kq = comments;
+  }).catchError((error) {
+    print(error);
+  });
   return kq;
 }
 
@@ -165,8 +152,6 @@ Future<List<Comment>> fetchCommentsById(int idDacSan) async {
   }
 }
 
-
-
 String? getDacSanTheoTen(String ten) {
   for (var dacSan in dsDacSan) {
     if (dacSan.tenDS! == ten) {
@@ -178,8 +163,8 @@ String? getDacSanTheoTen(String ten) {
 }
 
 Future<void> getHinhAnh() async {
-  var reponse =
-      await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getHinhAPI.php')); //https://cntt199.000webhostapp.com/getHinhAnh.php
+  var reponse = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getHinhAPI.php')); //https://cntt199.000webhostapp.com/getHinhAnh.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -189,8 +174,8 @@ Future<void> getHinhAnh() async {
 }
 
 Future<void> getNoiBan() async {
-  var reponse =
-  await get(Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getNoiBanAPI.php'));
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getNoiBanAPI.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -211,8 +196,8 @@ String? getTenTinh(String? idTinh) {
 }
 
 Future<void> getTinhThanh() async {
-  var reponse = await get(
-      Uri.parse('https://truyentranhandriod.000webhostapp.com/api/getTinhAPI.php')); // https://cntt199.000webhostapp.com/getTinhThanh.php
+  var reponse = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getTinhAPI.php')); // https://cntt199.000webhostapp.com/getTinhThanh.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -221,12 +206,9 @@ Future<void> getTinhThanh() async {
   }
 }
 
-
-
 String getURLImage(String? idImage) {
   String url = 'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png';
-  int index = dsHinhAnh
-      .indexWhere((hinhAnh) => hinhAnh.idAnh == idImage);
+  int index = dsHinhAnh.indexWhere((hinhAnh) => hinhAnh.idAnh == idImage);
   if (index != -1) {
     return dsHinhAnh[index].link.toString();
   }
@@ -247,26 +229,26 @@ Future<String> getNameUser(String idUser) async {
   }
 }
 
-
 List<String?> getTinhTuVung(String? idOfVung) {
-  List<TinhThanh> DSTinh = dsTinhThanh.where((ds) => ds.idVung == idOfVung).toList();
+  List<TinhThanh> DSTinh =
+      dsTinhThanh.where((ds) => ds.idVung == idOfVung).toList();
 
   List<String?> tenTinhList = DSTinh.map((tinh) => tinh.idTinh).toList();
 
   return tenTinhList;
 }
 
-
 List<DacSan> getIDTuTenTinh(String? tenTinh) {
+  if (tenTinh == ' 👈 Lấy vị trí hiện tại') {
+    return dsDacSan;
+  }
 
-  if(tenTinh == ' 👈 Lấy vị trí hiện tại')
-      return dsDacSan;
+  TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh);
 
-    TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh);
+  List<DacSan> DSFilterDS =
+      dsDacSan.where((ds) => ds.idTinh == IDTinh.idTinh).toList();
 
-  List<DacSan> DSFiterDS = dsDacSan.where((ds) => ds.idTinh == IDTinh.idTinh).toList();
-
-  return DSFiterDS;
+  return DSFilterDS;
 }
 
 // Lấy tên tỉnh từ ID
@@ -276,7 +258,7 @@ String getTinhTuID(String? idTinh) {
 }
 
 // Lấy tên từ idUser
-String getTenUser(String? idUser) {
+String? getTenUser(String? idUser) {
   NguoiDung User = dsNguoiDung.firstWhere((ds) => ds.uid == idUser);
   return User.hoTen;
 }

@@ -177,6 +177,13 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
                   IconButton(
                     style: ButtonStyle(
                         maximumSize:
+                        MaterialStateProperty.all(const Size(56, 56))),
+                    onPressed: DangNhapGoogle,
+                    icon: LoadHinh("assets/images/guest.png"),
+                  ),
+                  IconButton(
+                    style: ButtonStyle(
+                        maximumSize:
                             MaterialStateProperty.all(const Size(56, 56))),
                     onPressed: DangNhapGoogle,
                     icon: LoadHinh("assets/images/google.png"),
@@ -299,7 +306,7 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
     List<NguoiDung> dsNguoiDung = [];
 
     var response = await get(Uri.parse(
-        'https://cntt199.000webhostapp.com/getNguoiDung.php')); //https://cntt199.000webhostapp.com/getTinhThanh.php //https://provinces.open-api.vn/api/?depth=1
+        'https://truyentranhandriod.000webhostapp.com/api/getUsers.php'));
     var result = json.decode(utf8.decode(response.bodyBytes));
 
     if (context.mounted) {
