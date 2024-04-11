@@ -20,9 +20,8 @@ import '../Widget/ShowNoiBan.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final String maDS;
+
   const TrangChiTietDacSan({super.key, required this.maDS});
-
-
 
   @override
   _TrangChiTietDacSanState createState() => _TrangChiTietDacSanState();
@@ -30,6 +29,7 @@ class TrangChiTietDacSan extends StatefulWidget {
 
 class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   late DacSan dacSan;
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +51,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Image.network(
-                    dacSan.avatar ?? 'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png',
+                    dacSan.avatar ??
+                        'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png',
                     width: double.infinity,
                     height: 240,
                     fit: BoxFit.cover,
@@ -87,8 +88,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       ),
                     ),
                     onPressed: () {
-                      context.push(
-                          "/dacsan/tinhThanh/${dacSan.idTinh}");
+                      context.push("/dacsan/tinhThanh/${dacSan.idTinh}");
                     },
                     child: Text(
                         // "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idTinh)}",
@@ -99,29 +99,30 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                             fontSize: 28,
                             fontFamily: 'ExtraBoldItalic')),
                   ),
-                  Spacer(),
-                  const ButtonSave(),
+                  const Spacer(),
+                  ButtonSave(idDacSan: widget.maDS, idUser: nguoiDung.uid),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 15),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   starNumber(dacSan.sao!),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Card(
-                    margin: EdgeInsets.only(bottom: 4),
+                    margin: const EdgeInsets.only(bottom: 4),
                     borderOnForeground: isCheck,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 1),
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, top: 3, bottom: 1),
                       child: Text(
                         dacSan.sao!.toString(),
                         style: const TextStyle(
-                            fontSize: 22,
-                            color: Colors.amber,
-                            fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -145,7 +146,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: getHinhAnhDS(dacSan.idDacSan ??
-                          'https://babettesonline.com/images/thumbs/default-image_1200.png').length,
+                          'https://babettesonline.com/images/thumbs/default-image_1200.png')
+                      .length,
                   // itemCount: 10,
                   itemBuilder: (context, index) {
                     return Container(
@@ -160,17 +162,13 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => xemHinh(getHinhAnhDS(
-                                      dacSan.idDacSan ??
-                                          '')[index]
-                                  )
-                              ),
+                                      dacSan.idDacSan ?? '')[index])),
                             );
                           },
                           child: Hero(
                             tag: 'hinhDS$index',
                             child: Image.network(
-                                getHinhAnhDS(
-                                    dacSan.idDacSan ?? '0')[index],
+                                getHinhAnhDS(dacSan.idDacSan ?? '0')[index],
                                 fit: BoxFit.cover,
                                 width:
                                     double.infinity, // Đặt chiều rộng mong muốn
@@ -349,5 +347,3 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
     return name;
   }
 }
-
-

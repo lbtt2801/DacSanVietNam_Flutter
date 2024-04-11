@@ -1,17 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vinaFoods/Model/tinh_thanh.dart';
 
 import '../Model/dac_san.dart';
 import '../Model/loai_dac_san.dart';
-import '../Service/thu_vien_api.dart';
 import '../Service/thu_vien_widget.dart';
-import '../main.dart';
 import '../Widget/ShowStar.dart';
+import '../main.dart';
 
 
 class TrangDacSanTheoTinh extends StatefulWidget {
@@ -124,7 +119,6 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
       padding: const EdgeInsets.only(
         top: 10,
         bottom: 10,
-        left: 10,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -22,7 +22,8 @@ Future<void> addUser(
     'IDTinh': diaChi,
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/api/registerUser_OLD.php');
+  var url =
+      Uri.parse('https://cntt199.000webhostapp.com/api/registerUser_OLD.php');
   await post(url, body: data);
 }
 
@@ -51,8 +52,7 @@ Future<void> updateUser(
 
 Future<NguoiDung?> getDSUser() async {
   var reponse = await get(
-      Uri.parse(
-          'https://cntt199.000webhostapp.com/api/getUsers.php'));
+      Uri.parse('https://cntt199.000webhostapp.com/api/getUsers.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -68,6 +68,34 @@ Future<NguoiDung?> getUser(String uid) async {
     }
   }
   return null;
+}
+
+Future<void> addFavorite(String idDacSan, String idUser) async {
+  Map<String, dynamic> data = {
+    'IDDacSan': idDacSan,
+    'IDUsers': idUser,
+  };
+  print('API: addFavorite  --------------------------------------');
+  var url = Uri.parse('https://cntt199.000webhostapp.com/api/addFavorite.php');
+  await post(url, body: data);
+}
+
+Future<void> getFavorite(String idUser) async {
+  var response = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser')); //https://cntt199.000webhostapp.com/getVungMien.php
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    List<String> lst = List<String>.from(data);
+
+    for (String id in lst) {
+      DacSan? dacSan = getDacSanTheoID(id);
+      dsYeuThich.add(dacSan);
+    }
+  } else {
+    throw Exception('Failed to fetch data');
+  }
+
+  print('---------------------- getFavorite ----------------${dsYeuThich[0]} ------------------ ');
 }
 
 Future<void> getVung() async {
@@ -115,8 +143,6 @@ Future<void> getComment() async {
   }
 }
 
-
-
 List<DacSan> getDanhSachDacSanTheoTen(String ten) {
   List<DacSan> kq = [];
   for (var dacSan in dsDacSan) {
@@ -158,8 +184,16 @@ String? getDacSanTheoTen(String ten) {
       return dacSan.idDacSan;
     }
   }
-
   return null;
+}
+
+DacSan getDacSanTheoID(String idDacSan) {
+  for (var dacSan in dsDacSan) {
+    if (dacSan.idDacSan == idDacSan) {
+      return dacSan;
+    }
+  }
+  return dsDacSan[0];
 }
 
 Future<void> getHinhAnh() async {

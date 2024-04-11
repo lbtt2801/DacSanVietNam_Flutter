@@ -14,6 +14,7 @@ class ManHinhChinh extends StatefulWidget {
     super.key,
     required this.page,
   });
+
   final StatefulNavigationShell page;
   final TextEditingController controller = TextEditingController();
 
@@ -24,6 +25,7 @@ class ManHinhChinh extends StatefulWidget {
 class _ManHinhChinhState extends State<ManHinhChinh> {
   var selectedIndex = 0;
   late Future<String> myFuture;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,6 +39,7 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
         await getDacSan();
         await getComment();
         await getDSUser();
+        await getFavorite(FirebaseAuth.instance.currentUser!.uid);
         await getNoiBan();
         nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;
         return "";
@@ -155,9 +158,8 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       },
       suggestionsCallback: (String pattern) {
         return dsDacSan
-            .where((element) => element.tenDS!
-                .toLowerCase()
-                .contains(pattern.toLowerCase()))
+            .where((element) =>
+                element.tenDS!.toLowerCase().contains(pattern.toLowerCase()))
             .toList();
       },
       itemBuilder: (BuildContext context, item) {
@@ -180,13 +182,13 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
     return BottomNavigationBar(
       backgroundColor: const Color.fromARGB(255, 30, 144, 255),
       items: const [
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.accessibility_new_sharp),
-        //   label: 'Yêu thich',
-        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Đặc sản',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite),
+          label: 'Yêu thích',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_box),

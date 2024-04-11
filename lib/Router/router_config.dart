@@ -6,6 +6,7 @@ import '../Model/comment.dart';
 import '../Page/trang_chi_tiet_dac_san.dart';
 import '../Page/trang_dac_san.dart';
 import '../Page/trang_dac_san_theo_tinh.dart';
+import '../Page/trang_dac_san_yeu_thich.dart';
 import '../Page/trang_danh_sach_dac_san.dart';
 import '../Page/trang_doi_mat_khau.dart';
 import '../Page/trang_nguoi_dung.dart';
@@ -18,8 +19,8 @@ import '../Service/thu_vien_api.dart';
 import '../main.dart';
 
 final rootNavKey = GlobalKey<NavigatorState>();
-final yeuThich = GlobalKey<NavigatorState>();
 final dacsanNavKey = GlobalKey<NavigatorState>();
+final yeuThichNavKey = GlobalKey<NavigatorState>();
 final nguoiDungNavKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
@@ -119,6 +120,19 @@ final GoRouter router = GoRouter(
                 ),
               ],
             ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: yeuThichNavKey,
+          routes: [
+            GoRoute(
+              parentNavigatorKey: yeuThichNavKey,
+              path: '/yeuthich',
+              name: "Danh sách Đặc sản Yêu thích",
+              builder: (context, state) {
+                return const TrangDacSanYeuThich();
+              },
+            )
           ],
         ),
         StatefulShellBranch(
