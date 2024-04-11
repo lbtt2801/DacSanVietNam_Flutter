@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vinaFoods/Model/tinh_thanh.dart';
 
 import '../Model/dac_san.dart';
 import '../Model/loai_dac_san.dart';
@@ -23,6 +24,7 @@ class TrangDacSanTheoTinh extends StatefulWidget {
 }
 
 class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
+  late TinhThanh tinhThanh;
   List<DacSan> lstDacSan = [];
   List<DacSan> filteredDacSan = [];
   String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
@@ -39,6 +41,7 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
     lstDacSan =
         dsDacSan.where((dacSan) => dacSan.idTinh == widget.maTinh).toList();
     filteredDacSan = lstDacSan;
+    tinhThanh = getTinhTuID(widget.maTinh);
   }
 
   @override
@@ -46,6 +49,15 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
     return Scaffold(
       body: Column(
         children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            child: Image.network(
+                tinhThanh.linkAnh!,
+                fit: BoxFit.cover,
+                width: 150, // Đặt chiều rộng mong muốn
+                height: 100),
+            ),
           headerLoaiDacSan(),
           Expanded(
             child: ListView.builder(

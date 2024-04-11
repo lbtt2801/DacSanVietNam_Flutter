@@ -16,6 +16,7 @@ import '../Widget/ButtonSave.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
 import '../Widget/ShowStar.dart';
+import '../Widget/ShowNoiBan.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final String maDS;
@@ -91,7 +92,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                     },
                     child: Text(
                         // "Đặc sản ${getMien(dsDacSan[widget.maDS - 1].idTinh)}",
-                        getTinhTuID(dacSan.idTinh),
+                        getTenTinhTuID(dacSan.idTinh),
                         style: const TextStyle(
                             fontWeight: FontWeight.w900,
                             color: Color.fromARGB(200, 255, 112, 10),
@@ -209,7 +210,6 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           color: Colors.black,
                           fontWeight: FontWeight.w900)),
                 )),
-            const SizedBox(height: 25),
             // const Padding(
             //   padding: EdgeInsets.only(
             //     left: 15,
@@ -240,7 +240,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
             //               color: Colors.black,
             //               fontWeight: FontWeight.w900)),
             //     )),
-            const SizedBox(height: 25),
+            const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(
                 left: 15,
@@ -252,7 +252,16 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       fontSize: 28,
                       fontFamily: "RobotoBlack")),
             ),
-            const SizedBox(height: 25),
+             Card(
+                color: const Color.fromARGB(255, 242, 242, 242),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8.0),
+                    child: ShowNoiBanList(idDacSan: dacSan.idDacSan!))
+            ),
+            const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(
                 left: 15,

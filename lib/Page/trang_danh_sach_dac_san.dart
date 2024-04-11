@@ -5,6 +5,8 @@ import '../Model/dac_san.dart';
 import '../Service/thu_vien_api.dart';
 import '../Service/thu_vien_widget.dart';
 import '../main.dart';
+import '../Widget/ShowStar.dart';
+
 
 class TrangDanhSachDacSan extends StatefulWidget {
   const TrangDanhSachDacSan({
@@ -87,8 +89,12 @@ class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Thành phần: ${dsDacSanDaLoc[index].moTa!}"),
-                  Text('Xuất xứ: ${getTenTinh(dsDacSanDaLoc[index].idTinh)}'),
+                  Text(
+                      "Xuất xứ: ${getTenTinhTuID(dsDacSanDaLoc[index].idTinh!)
+                      }",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  starNumber(dsDacSanDaLoc[index].sao!),
                 ],
               ),
               leading: Padding(

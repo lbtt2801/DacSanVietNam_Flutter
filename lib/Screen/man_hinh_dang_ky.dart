@@ -305,7 +305,7 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
                               widget.emailController.text,
                               widget.hoTenController.text,
                               isNam,
-                              tinhThanh!,
+                              tinhThanh,
                             );
                             if (context.mounted) {
                               Navigator.push(

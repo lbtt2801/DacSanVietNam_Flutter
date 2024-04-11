@@ -184,6 +184,8 @@ Future<void> getNoiBan() async {
   }
 }
 
+
+
 String? getTenTinh(String? idTinh) {
   Iterable<TinhThanh> tt =
       dsTinhThanh.where((element) => element.idTinh == idTinh);
@@ -252,7 +254,7 @@ List<DacSan> getIDTuTenTinh(String? tenTinh) {
 }
 
 // Lấy tên tỉnh từ ID
-String getTinhTuID(String? idTinh) {
+String getTenTinhTuID(String? idTinh) {
   TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.idTinh == idTinh);
   return IDTinh.tenTinh.toString();
 }
@@ -261,4 +263,16 @@ String getTinhTuID(String? idTinh) {
 String? getTenUser(String? idUser) {
   NguoiDung User = dsNguoiDung.firstWhere((ds) => ds.uid == idUser);
   return User.hoTen;
+}
+
+// Lấy noi bán từ idDaSan
+List<NoiBan> getNoiBanToDacSan(String idDS){
+  List<NoiBan> ds = dsNoiBan.where((ds) => ds.idDacSan == idDS).toList();
+  return ds;
+}
+
+// Lấy tỉnh từ id
+TinhThanh getTinhTuID(String id){
+  TinhThanh tt = dsTinhThanh.firstWhere((ds) => ds.idTinh == id);
+  return tt;
 }
