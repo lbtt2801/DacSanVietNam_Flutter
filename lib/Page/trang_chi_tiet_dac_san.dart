@@ -221,7 +221,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       fontFamily: "RobotoBlack")),
             ),
             Card(
-                color: const Color.fromARGB(255, 242, 242, 242),
+                // color: const Color.fromARGB(255, 242, 242, 242),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 child: Container(
