@@ -6,6 +6,8 @@ import '../Service/thu_vien_widget.dart';
 import '../Widget/ShowStar.dart';
 import '../main.dart';
 import '../Service/thu_vien_api.dart';
+import '../Model/Provider.dart';
+import 'package:provider/provider.dart';
 
 
 class TrangDacSanYeuThich extends StatefulWidget {
@@ -21,21 +23,15 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
   @override
   void initState() {
     super.initState();
-    setState(() {
       dacSans = dsYeuThich;
-    });
   }
 
-  void updateData() {
-    setState(() {
-      dacSans = dsYeuThich;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    List<DacSan> DacSans = dsYeuThich;
-
+    final provder = Provider.of<ThuVienProvider>(context);
+    List<DacSan> DacSans = provder.ListYeuThich;
     return Scaffold(
       body: Column(
         children: [
@@ -53,7 +49,6 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                 fontSize: 18,
               ),
             ),
-            onTap: updateData,
           ),
           Expanded(
             child: DacSans.isEmpty
@@ -80,7 +75,6 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                       return InkWell(
                         onTap: () =>
                             context.go("/dacsan/chitiet/${dacSan.idDacSan}"),
-                        onTapCancel: updateData,
                         child: SizedBox(
                           child: Dismissible(
                             key: Key(dacSan.tenDS!),
@@ -88,13 +82,21 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                               setState(() {
                                 dsYeuThich.removeAt(index);
                                 removeFavorite(nguoiDung.uid, dacSan.idDacSan!);// Xóa mục khỏi danh sách khi bị kéo sang ngang
+                                provder.addDS(dsYeuThich);
                               });
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text("Đặc sản đã bị xóa",
-                                      style: TextStyle(color: Colors.red),),
+                                      style: TextStyle(color: Colors.blue),
+                                      ),
                                   ));
                             },
+                            background: Container(
+                              color: Colors.red, // Màu nền hiệu ứng khi kéo sang ngang
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 20.0),
+                              child: Icon(Icons.delete, color: Colors.white), // Icon hoặc widget khác để biểu thị hành động loại bỏ
+                            ),
                             child: Card(
                               color:
                                   Theme.of(context).brightness == Brightness.light

@@ -13,6 +13,8 @@ import '../Widget/ShowNoiBan.dart';
 import '../Widget/ShowStar.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
+import '../Model/Provider.dart';
+import 'package:provider/provider.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final String maDS;
@@ -38,6 +40,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
 
   @override
   Widget build(BuildContext context) {
+    final provder = Provider.of<ThuVienProvider>(context);
+
     bool isCheck = false;
     return SingleChildScrollView(
       child: Padding(

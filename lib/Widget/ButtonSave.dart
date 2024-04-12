@@ -3,6 +3,9 @@ import 'package:vinaFoods/main.dart';
 
 import '../Model/dac_san.dart';
 import '../Service/thu_vien_api.dart';
+import '../Model/Provider.dart';
+import 'package:provider/provider.dart';
+
 
 class ButtonSave extends StatefulWidget {
   final String idDacSan;
@@ -20,13 +23,12 @@ class _ButtonSaveState extends State<ButtonSave> {
   @override
   void initState() {
     super.initState();
-    isCheck = dsYeuThich.any(
-      (ds) => ds.idDacSan == widget.idDacSan,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final provder = Provider.of<ThuVienProvider>(context);
+    isCheck = provder.ListYeuThich.any((ds) => ds.idDacSan == widget.idDacSan);
     return IconButton(
       iconSize: 37,
       color: Colors.red,
@@ -42,6 +44,7 @@ class _ButtonSaveState extends State<ButtonSave> {
           await removeFavorite(widget.idUser, widget.idDacSan);
         }
         await getFavorite(widget.idUser);
+        provder.addDS(dsYeuThich);
       },
     );
   }
