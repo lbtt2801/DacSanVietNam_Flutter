@@ -82,11 +82,12 @@ Future<void> addFavorite(String idDacSan, String idUser) async {
 
 Future<void> getFavorite(String idUser) async {
   var response = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser')); //https://cntt199.000webhostapp.com/getVungMien.php
+      'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser'));
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    List<String> lst = List<String>.from(data);
 
+    List<String> lst = List<String>.from(data);
+    if (dsYeuThich.isNotEmpty) dsYeuThich.clear();
     for (String id in lst) {
       DacSan? dacSan = getDacSanTheoID(id);
       dsYeuThich.add(dacSan);
@@ -95,7 +96,19 @@ Future<void> getFavorite(String idUser) async {
     throw Exception('Failed to fetch data');
   }
 
-  print('---------------------- getFavorite ----------------${dsYeuThich[0]} ------------------ ');
+  print('---------------------- getFavorite ----------------');
+}
+
+Future<void> removeFavorite(String idUser, String idDacSan) async {
+  var response = await get(Uri.parse(
+      'https://cntt199.000webhostapp.com/api/removeFavorite.php?IDUsers=$idUser&IDDacSan=$idDacSan'));
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+  } else {
+    throw Exception('Failed to remove Favorite');
+  }
+
+  print('---------------------- removeFavorite ----------------');
 }
 
 Future<void> getVung() async {
@@ -132,15 +145,34 @@ Future<void> getDacSan() async {
   }
 }
 
+Future<void> postComment(String soSao, String noiDung, String thoiGian,
+    String idDacSan, String idUser) async {
+  Map<String, dynamic> data = {
+    'SoSao': soSao,
+    'NoiDung': noiDung,
+    'ThoiGian': thoiGian,
+    'IDDacSan': idDacSan,
+    'IDUsers': idUser,
+  };
+
+  var url = Uri.parse('https://cntt199.000webhostapp.com/api/postComment.php');
+  await post(url, body: data);
+
+  print('---------------------- postComment ----------------');
+}
+
 Future<void> getComment() async {
   var reponse = await get(Uri.parse(
       'https://cntt199.000webhostapp.com/api/getCommentAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
+  if(dsComment.isNotEmpty) dsComment.clear();
   for (var document in result) {
     Comment comment = Comment.fromJson(document);
     dsComment.add(comment);
   }
+
+  print('---------------------- getComment ----------------');
 }
 
 List<DacSan> getDanhSachDacSanTheoTen(String ten) {
@@ -217,8 +249,6 @@ Future<void> getNoiBan() async {
     dsNoiBan.add(noiBan);
   }
 }
-
-
 
 String? getTenTinh(String? idTinh) {
   Iterable<TinhThanh> tt =
@@ -300,13 +330,13 @@ String? getTenUser(String? idUser) {
 }
 
 // Lấy noi bán từ idDaSan
-List<NoiBan> getNoiBanToDacSan(String idDS){
+List<NoiBan> getNoiBanToDacSan(String idDS) {
   List<NoiBan> ds = dsNoiBan.where((ds) => ds.idDacSan == idDS).toList();
   return ds;
 }
 
 // Lấy tỉnh từ id
-TinhThanh getTinhTuID(String id){
+TinhThanh getTinhTuID(String id) {
   TinhThanh tt = dsTinhThanh.firstWhere((ds) => ds.idTinh == id);
   return tt;
 }

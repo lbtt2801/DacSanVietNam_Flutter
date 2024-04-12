@@ -79,6 +79,7 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
               InkWell(
                 onTap: () {
                   context.go('/');
+                  selectedIndex = 0;
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(

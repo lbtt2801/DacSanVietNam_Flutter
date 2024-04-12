@@ -15,13 +15,11 @@ class ButtonSave extends StatefulWidget {
 }
 
 class _ButtonSaveState extends State<ButtonSave> {
-  bool isCheck = false; // get api de xac nhan gom idDacSan va idUser
-  late DacSan dacSan;
+  late bool isCheck;
 
   @override
   void initState() {
     super.initState();
-    dacSan = dsDacSan.where((ds) => ds.idDacSan == widget.idDacSan).first;
     isCheck = dsYeuThich.any(
       (ds) => ds.idDacSan == widget.idDacSan,
     );
@@ -33,12 +31,17 @@ class _ButtonSaveState extends State<ButtonSave> {
       iconSize: 37,
       color: Colors.red,
       icon: Icon(isCheck ? Icons.favorite : Icons.favorite_outline),
-      onPressed: () {
+      onPressed: () async {
         setState(() {
           isCheck = !isCheck;
-          addFavorite(widget.idDacSan, widget.idUser);
-          getFavorite(widget.idUser);
+          print(dsYeuThich.length);
         });
+        if (isCheck) {
+          await addFavorite(widget.idDacSan, widget.idUser);
+        } else {
+          await removeFavorite(widget.idUser, widget.idDacSan);
+        }
+        await getFavorite(widget.idUser);
       },
     );
   }

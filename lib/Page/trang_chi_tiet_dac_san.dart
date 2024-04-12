@@ -1,22 +1,18 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:vinaFoods/Model/dac_san.dart';
 import 'package:vinaFoods/Service/thu_vien_api.dart';
-import 'package:vinaFoods/Widget/RatingBar.dart';
-import 'package:vinaFoods/Widget/Review.dart';
 
-import '../Model/vung_mien.dart';
 import '../Model/comment.dart';
 import '../Widget/ButtonSave.dart';
+import '../Widget/ShowNoiBan.dart';
+import '../Widget/ShowStar.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
-import '../Widget/ShowStar.dart';
-import '../Widget/ShowNoiBan.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final String maDS;
@@ -29,11 +25,15 @@ class TrangChiTietDacSan extends StatefulWidget {
 
 class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   late DacSan dacSan;
+  late List<Comment> listComment;
+  double rating = 0;
+  TextEditingController reviewController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     dacSan = dsDacSan.where((ds) => ds.idDacSan == widget.maDS).first;
+    listComment = dsComment.where((cm) => cm.idDacSan == widget.maDS).toList();
   }
 
   @override
@@ -198,7 +198,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   child: SelectableText(dacSan.moTa ?? '',
-                      textDirection: TextDirection.ltr,
+                      // textDirection: TextDirection.ltr,
                       textAlign: TextAlign.justify,
                       style: const TextStyle(
                           fontSize: 18,
@@ -208,36 +208,6 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           color: Colors.black,
                           fontWeight: FontWeight.w900)),
                 )),
-            // const Padding(
-            //   padding: EdgeInsets.only(
-            //     left: 15,
-            //   ),
-            //   child: Text('Nguyên liệu',
-            //       style: TextStyle(
-            //           fontWeight: FontWeight.w600,
-            //           color: Colors.teal,
-            //           fontSize: 28,
-            //           fontFamily: "RobotoBlack")),
-            // ),
-            // Card(
-            //     color: const Color.fromARGB(255, 242, 242, 242),
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(5)),
-            //     child: Container(
-            //       width: double.infinity,
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: SelectableText(
-            //           dsDacSan[widget.maDS - 1].thanhPhan ?? '',
-            //           textDirection: TextDirection.ltr,
-            //           textAlign: TextAlign.justify,
-            //           style: const TextStyle(
-            //               fontSize: 18,
-            //               fontFamily: 'RobotoLight',
-            //               wordSpacing: 1.3,
-            //               letterSpacing: 0.1,
-            //               color: Colors.black,
-            //               fontWeight: FontWeight.w900)),
-            //     )),
             const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(
@@ -250,15 +220,14 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       fontSize: 28,
                       fontFamily: "RobotoBlack")),
             ),
-             Card(
+            Card(
                 color: const Color.fromARGB(255, 242, 242, 242),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8.0),
-                    child: ShowNoiBanList(idDacSan: dacSan.idDacSan!))
-            ),
+                    child: ShowNoiBanList(idDacSan: dacSan.idDacSan!))),
             const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(
@@ -276,9 +245,93 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8.0),
-                    child: const RatingWidget())),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8.0),
+                  // child: const RatingWidget()
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          RatingBar.builder(
+                            initialRating: rating,
+                            minRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemCount: 5,
+                            itemSize: 40.0,
+                            unratedColor: Colors.grey,
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (value) {
+                              setState(() {
+                                rating = value;
+                              });
+                            },
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: rating > 0
+                                ? () async {
+                                    // Xử lý lưu đánh giá và nội dung
+                                    // setState(() {
+                                    //   // getCommentsFollowIDDacSan(3);
+                                    // });
+                                    DateTime now = DateTime.now();
+                                    String formattedDateTime =
+                                        DateFormat('yyyy-MM-dd HH:mm:ss')
+                                            .format(now);
+
+                                    //       'SoSao': 2, //soSao,
+                                    // 'NoiDung': 'noiDung',
+                                    // 'ThoiGian': 'thoiGian',
+                                    // 'LuotThich': 0,
+                                    // 'LuotDislike': 0,
+                                    // 'TrangThai': 1,
+                                    // 'IDDacSan': 'DSAN001', //idDacSan,
+                                    // 'IDUsers': '24Rajk8NWyYhkPEtfwPBBSFeLCh1', //idUser,
+                                    await postComment(
+                                        rating.toString(),
+                                        reviewController.text,
+                                        formattedDateTime,
+                                        widget.maDS,
+                                        nguoiDung.uid);
+                                    await getComment();
+
+                                    setState(() {
+                                      listComment = dsComment
+                                          .where((cm) =>
+                                              cm.idDacSan == widget.maDS)
+                                          .toList();
+                                    });
+                                  }
+                                : null,
+                            child: const Text('Gửi đánh giá'),
+                          ),
+                        ],
+                      ),
+                      TextField(
+                        controller: reviewController,
+                        maxLength: 200,
+                        maxLines: 2,
+                        decoration: InputDecoration(
+                          hintText: 'Nhập nội dung đánh giá',
+                          suffixIcon: reviewController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      reviewController.clear();
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
             const SizedBox(height: 25),
             const Padding(
               padding: EdgeInsets.only(
@@ -296,9 +349,67 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
                 child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(1.0),
-                    child: ReviewsList(idDacSan: dacSan.idDacSan!))),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(1.0),
+                  // child: ReviewsList(idDacSan: dacSan.idDacSan!)
+                  child: SizedBox(
+                    height: 300.0,
+                    child: ListView.builder(
+                      itemCount: listComment.length,
+                      itemBuilder: (context, index) {
+                        final review = listComment[index];
+
+                        return ListTile(
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 7.0),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(review.thoiGian ?? 'Time is NULL',
+                                  style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 15,
+                                      fontStyle: FontStyle.italic),
+                                  textAlign: TextAlign.start),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      getTenUser(review.idUser) ?? 'Guest',
+                                      style: const TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 255, 112, 10),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  RatingBar.builder(
+                                    itemSize: 25.0,
+                                    initialRating: double.tryParse(review.soSao ?? '0') ?? 0.0,
+                                    minRating: 0,
+                                    maxRating: 5,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {},
+                                    ignoreGestures: true,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 4.0),
+                              Text(review.noiDung ?? 'noiDung is NULL')
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                )),
           ],
         ),
       ),
@@ -313,37 +424,5 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
       }
     }
     return ds;
-  }
-
-  Future<void> getVungMien() async {
-    var reponse = await get(
-        Uri.parse('https://cntt199.000webhostapp.com/getVungMien.php'));
-    var result = json.decode(utf8.decode(reponse.bodyBytes));
-
-    for (var document in result) {
-      Vung vungMien = Vung.fromJson(document);
-      dsVungMien.add(vungMien);
-    }
-    setState(() {});
-  }
-
-  String getURLImage(String? idImage) {
-    //// cai nay dung duoc
-    String url = 'http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png';
-    int index = dsHinhAnh.indexWhere(
-        (hinhAnh) => hinhAnh.idAnh.toString() == idImage.toString());
-    if (index != -1) {
-      return dsHinhAnh[index].link.toString();
-    }
-    return url;
-  }
-
-  String getMien(String? IdMien) {
-    String name = '404';
-    int index = dsVungMien.indexWhere((vungMien) => vungMien.idVung == IdMien);
-    if (index != -1) {
-      return dsVungMien[index].tenVung.toString();
-    }
-    return name;
   }
 }

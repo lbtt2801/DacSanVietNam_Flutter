@@ -419,7 +419,7 @@ class DacSanList extends StatelessWidget {
                 return InkWell(
                   onTap: () =>
                   {
-                    getCommentsFollowIDDacSan(1),
+                    // getCommentsFollowIDDacSan(1),
                     context.go("/dacsan/chitiet/${lstDacSan[index].idDacSan}")
                   },
                   child: Expanded(

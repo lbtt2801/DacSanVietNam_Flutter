@@ -1,13 +1,11 @@
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinaFoods/Model/loai_dac_san.dart';
 import 'package:vinaFoods/Model/noi_bat.dart';
-import 'package:vinaFoods/Service/thu_vien_api.dart';
 
 import 'Model/comment.dart';
 import 'Model/dac_san.dart';
@@ -42,7 +40,7 @@ Future<void> main() async {
           apiKey: "AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8",
           authDomain: "dacsanvietnam-6ee19.firebaseapp.com",
           databaseURL:
-          "https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app",
+              "https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app",
           projectId: "dacsanvietnam-6ee19",
           storageBucket: "dacsanvietnam-6ee19.appspot.com",
           messagingSenderId: "41890746519",

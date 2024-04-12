@@ -131,6 +131,7 @@ final GoRouter router = GoRouter(
               name: "Danh sách Đặc sản Yêu thích",
               builder: (context, state) {
                 return const TrangDacSanYeuThich();
+                // return TrangDacSanYeuThich(dsDacSan: dsYeuThich,);
               },
             )
           ],

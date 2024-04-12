@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../Model/dac_san.dart';
 import '../Service/thu_vien_widget.dart';
 import '../Widget/ShowStar.dart';
 import '../main.dart';
@@ -13,16 +14,26 @@ class TrangDacSanYeuThich extends StatefulWidget {
 }
 
 class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
+  List<DacSan> dacSans = [];
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      dsYeuThich = dsYeuThich;
+      dacSans = dsYeuThich;
+    });
+  }
+
+  void updateData() {
+    setState(() {
+      dacSans = dsYeuThich;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<DacSan> DacSans = dsYeuThich;
+
     return Scaffold(
       body: Column(
         children: [
@@ -40,9 +51,10 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                 fontSize: 18,
               ),
             ),
+            onTap: updateData,
           ),
           Expanded(
-            child: dsYeuThich.isEmpty
+            child: DacSans.isEmpty
                 ? ListTile(
                     shape: LinearBorder.bottom(
                       side: const BorderSide(
@@ -59,13 +71,14 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: dsYeuThich.length,
+                    itemCount: DacSans.length,
                     itemBuilder: (context, index) {
-                      final dacSan = dsYeuThich[index];
+                      final dacSan = DacSans[index];
 
                       return InkWell(
                         onTap: () =>
                             context.go("/dacsan/chitiet/${dacSan.idDacSan}"),
+                        onTapCancel: updateData,
                         child: SizedBox(
                           child: Card(
                             color:
