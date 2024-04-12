@@ -1,7 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -16,6 +15,7 @@ class TrangNguoiDung extends StatefulWidget {
   TrangNguoiDung({
     super.key,
   });
+
   NguoiDung? nguoiDung;
   final TextEditingController uidController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -31,6 +31,8 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
   String updateText = "Cập nhật thông tin";
   bool isNam = true;
   int indexTinh = 0;
+  String textLogout =
+      nguoiDung.uid == idGuest ? 'Đăng nhập/ Đăng ký' : "Đăng xuất";
 
   @override
   void initState() {
@@ -181,67 +183,73 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 25,
-                    bottom: 15,
-                    left: 25,
-                    right: 25,
-                  ),
-                  child: ElevatedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(35),
-                      padding: const EdgeInsets.all(12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      side: const BorderSide(
-                          width: 1, color: Colors.lightBlueAccent),
+                Visibility(
+                  visible: nguoiDung.uid != idGuest,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: 25,
+                      bottom: 15,
+                      left: 25,
+                      right: 25,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (isReadOnly) {
-                          isReadOnly = false;
-                          updateText = "Lưu thông tin";
-                        } else {
-                          isReadOnly = true;
-                          updateUser(
-                            widget.uidController.text,
-                            widget.emailController.text,
-                            widget.hoTenController.text,
-                            isNam,
-                            widget.diaChiController.text,
-                          );
-                          updateText = "Cập nhật thông tin";
-                        }
-                      });
-                    },
-                    child: Text(updateText),
+                    child: ElevatedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(35),
+                        padding: const EdgeInsets.all(12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        side: const BorderSide(
+                            width: 1, color: Colors.lightBlueAccent),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (isReadOnly) {
+                            isReadOnly = false;
+                            updateText = "Lưu thông tin";
+                          } else {
+                            isReadOnly = true;
+                            updateUser(
+                              widget.uidController.text,
+                              widget.emailController.text,
+                              widget.hoTenController.text,
+                              isNam,
+                              widget.diaChiController.text,
+                            );
+                            updateText = "Cập nhật thông tin";
+                          }
+                        });
+                      },
+                      child: Text(updateText),
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 15,
-                    left: 25,
-                    right: 25,
-                  ),
-                  child: ElevatedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(35),
-                      padding: const EdgeInsets.all(12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      side: const BorderSide(
-                          width: 1, color: Colors.lightBlueAccent),
+                Visibility(
+                  visible: nguoiDung.uid != idGuest,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 15,
+                      left: 25,
+                      right: 25,
                     ),
-                    onPressed: !isReadOnly
-                        ? null
-                        : () {
-                            context.go(
-                                "/doimatkhau/${FirebaseAuth.instance.currentUser!.uid}");
-                          },
-                    child: const Text("Cập nhật mât khẩu"),
+                    child: ElevatedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(35),
+                        padding: const EdgeInsets.all(12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        side: const BorderSide(
+                            width: 1, color: Colors.lightBlueAccent),
+                      ),
+                      onPressed: !isReadOnly
+                          ? null
+                          : () {
+                              context.go(
+                                  "/doimatkhau/${FirebaseAuth.instance.currentUser!.uid}");
+                            },
+                      child: const Text("Cập nhật mât khẩu"),
+                    ),
                   ),
                 ),
                 Padding(
@@ -261,7 +269,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                       await FirebaseAuth.instance
                           .signOut()
                           .whenComplete(() async {
-                        await FacebookAuth.instance.logOut();
+                        // await FacebookAuth.instance.logOut();
                         await GoogleSignIn().signOut().whenComplete(() {
                           if (context.mounted) {
                             dsDacSan.clear();
@@ -273,7 +281,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                         });
                       });
                     },
-                    child: const Text("Đăng xuất"),
+                    child: Text(textLogout),
                   ),
                 ),
               ],

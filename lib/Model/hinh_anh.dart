@@ -1,5 +1,4 @@
-class HinhAnh
-{
+class HinhAnh {
   String? idAnh;
   String? idDacSan;
   String? link;

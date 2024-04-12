@@ -3,23 +3,20 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vinaFoods/Model/loai_dac_san.dart';
-import 'package:vinaFoods/Model/noi_bat.dart';
 
+import 'Model/Provider.dart';
 import 'Model/comment.dart';
 import 'Model/dac_san.dart';
 import 'Model/hinh_anh.dart';
 import 'Model/nguoi_dung.dart';
 import 'Model/noi_ban.dart';
+import 'Model/noi_bat.dart';
 import 'Model/tinh_thanh.dart';
 import 'Model/vung_mien.dart';
 import 'Router/router_config.dart';
-import 'Model/Provider.dart';
-import 'package:provider/provider.dart';
-
-
-
 
 late final SharedPreferences ref;
 List<Vung> dsVungMien = [];
@@ -35,33 +32,33 @@ List<LoaiDacSan> dsLoaiDacSan = [];
 List<NoiBat> dsDacSanNoiBat = [];
 List<DacSan> dsYeuThich = [];
 List<Comment> dsComment = [];
+List<Comment> dsCommentIdUser = [];
+String idGuest = 'VnnNKzwRoqOItzRC4PPg4mkaRcc2';
 late NguoiDung nguoiDung;
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
       options: const FirebaseOptions(
-          apiKey: "AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8",
-          authDomain: "dacsanvietnam-6ee19.firebaseapp.com",
-          databaseURL:
-              "https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "dacsanvietnam-6ee19",
-          storageBucket: "dacsanvietnam-6ee19.appspot.com",
-          messagingSenderId: "41890746519",
-          appId: "1:41890746519:android:e985a7d3cee3b3e61199d2",
-          measurementId: "G-ES189ZW8QH"));
+    apiKey: 'AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8',
+    appId: '1:41890746519:android:e985a7d3cee3b3e61199d2',
+    messagingSenderId: '41890746519',
+    projectId: 'dacsanvietnam-6ee19',
+    authDomain: 'dacsanvietnam-6ee19.firebaseapp.com',
+    databaseURL:
+        'https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'dacsanvietnam-6ee19.appspot.com',
+    measurementId: 'G-ES189ZW8QH',
+  ));
 
   ref = await SharedPreferences.getInstance();
 
   // deleteUser("NzUeEuQvJiY9e6SOET96Jajv0Ur2");
 
-
-  runApp(
-      ChangeNotifierProvider(
+  runApp(ChangeNotifierProvider(
     create: (context) => ThuVienProvider(),
-    child: MainApp(),
+    child: const MainApp(),
   ));
 }
 

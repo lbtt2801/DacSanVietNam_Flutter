@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
@@ -13,8 +11,6 @@ import '../Widget/ShowNoiBan.dart';
 import '../Widget/ShowStar.dart';
 import '../Widget/xemHinh.dart';
 import '../main.dart';
-import '../Model/Provider.dart';
-import 'package:provider/provider.dart';
 
 class TrangChiTietDacSan extends StatefulWidget {
   final String maDS;
@@ -27,7 +23,10 @@ class TrangChiTietDacSan extends StatefulWidget {
 
 class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   late DacSan dacSan;
+  late bool isHasComment = false;
+  late Comment comment;
   late List<Comment> listComment;
+  String textButton = 'Gửi đánh giá';
   double rating = 0;
   TextEditingController reviewController = TextEditingController();
 
@@ -40,8 +39,6 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
 
   @override
   Widget build(BuildContext context) {
-    final provder = Provider.of<ThuVienProvider>(context);
-
     bool isCheck = false;
     return SingleChildScrollView(
       child: Padding(
@@ -278,40 +275,79 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           ElevatedButton(
                             onPressed: rating > 0
                                 ? () async {
-                                    // Xử lý lưu đánh giá và nội dung
-                                    // setState(() {
-                                    //   // getCommentsFollowIDDacSan(3);
-                                    // });
-                                    DateTime now = DateTime.now();
-                                    String formattedDateTime =
-                                        DateFormat('yyyy-MM-dd HH:mm:ss')
-                                            .format(now);
+                                    if (nguoiDung.uid != idGuest) {
+                                      DateTime now = DateTime.now();
+                                      String formattedDateTime =
+                                          DateFormat('yyyy-MM-dd HH:mm:ss')
+                                              .format(now);
 
-                                    //       'SoSao': 2, //soSao,
-                                    // 'NoiDung': 'noiDung',
-                                    // 'ThoiGian': 'thoiGian',
-                                    // 'LuotThich': 0,
-                                    // 'LuotDislike': 0,
-                                    // 'TrangThai': 1,
-                                    // 'IDDacSan': 'DSAN001', //idDacSan,
-                                    // 'IDUsers': '24Rajk8NWyYhkPEtfwPBBSFeLCh1', //idUser,
-                                    await postComment(
-                                        rating.toString(),
-                                        reviewController.text,
-                                        formattedDateTime,
-                                        widget.maDS,
-                                        nguoiDung.uid);
-                                    await getComment();
+                                      if (dsCommentIdUser.isNotEmpty) {
+                                        isHasComment = dsCommentIdUser.any(
+                                          (ds) => ds.idDacSan == widget.maDS,
+                                        );
+                                      }
+                                      if (isHasComment) {
+                                        await updateComment(
+                                          rating.toString(),
+                                          reviewController.text,
+                                          formattedDateTime,
+                                          widget.maDS,
+                                          nguoiDung.uid,
+                                        );
+                                      } else {
+                                        await postComment(
+                                          rating.toString(),
+                                          reviewController.text,
+                                          formattedDateTime,
+                                          widget.maDS,
+                                          nguoiDung.uid,
+                                        );
+                                      }
 
-                                    setState(() {
-                                      listComment = dsComment
-                                          .where((cm) =>
-                                              cm.idDacSan == widget.maDS)
-                                          .toList();
-                                    });
+                                      await getComment();
+
+                                      setState(() {
+                                        listComment = dsComment
+                                            .where((cm) =>
+                                                cm.idDacSan == widget.maDS)
+                                            .toList();
+                                        dsCommentIdUser.insert(
+                                            0,
+                                            Comment(
+                                                soSao: rating.toString(),
+                                                noiDung: reviewController.text,
+                                                thoiGian: formattedDateTime,
+                                                idDacSan: widget.maDS,
+                                                idUser: nguoiDung.uid));
+                                      });
+                                    } else {
+                                      showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text(
+                                            'Thông báo',
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                          content: const Text(
+                                            'Bạn phải đăng nhập để thực hiện tính năng này!',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.orange),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context, 'OK'),
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
                                   }
                                 : null,
-                            child: const Text('Gửi đánh giá'),
+                            child: Text(textButton),
                           ),
                         ],
                       ),
@@ -358,60 +394,80 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                   // child: ReviewsList(idDacSan: dacSan.idDacSan!)
                   child: SizedBox(
                     height: 300.0,
-                    child: ListView.builder(
-                      itemCount: listComment.length,
-                      itemBuilder: (context, index) {
-                        final review = listComment[index];
-
-                        return ListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 7.0),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(review.thoiGian ?? 'Time is NULL',
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 15,
-                                      fontStyle: FontStyle.italic),
-                                  textAlign: TextAlign.start),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      getTenUser(review.idUser) ?? 'Guest',
-                                      style: const TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 255, 112, 10),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  RatingBar.builder(
-                                    itemSize: 25.0,
-                                    initialRating: double.tryParse(review.soSao ?? '0') ?? 0.0,
-                                    minRating: 0,
-                                    maxRating: 5,
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) {},
-                                    ignoreGestures: true,
-                                  ),
-                                ],
+                    child: listComment.isEmpty
+                        ? ListTile(
+                            shape: LinearBorder.bottom(
+                              side: const BorderSide(
+                                color: Color.fromARGB(155, 211, 211, 211),
                               ),
-                            ],
+                            ),
+                            title: const Text(
+                              'Hiện chưa có nhận xét nào. Đánh giá ngay!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: listComment.length,
+                            itemBuilder: (context, index) {
+                              final review = listComment[index];
+
+                              return ListTile(
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 7.0),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(review.thoiGian ?? 'Time is NULL',
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 15,
+                                            fontStyle: FontStyle.italic),
+                                        textAlign: TextAlign.start),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            getTenUser(review.idUser) ??
+                                                'Guest',
+                                            style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 255, 112, 10),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        RatingBar.builder(
+                                          itemSize: 25.0,
+                                          initialRating: double.tryParse(
+                                                  review.soSao ?? '0') ??
+                                              0.0,
+                                          minRating: 0,
+                                          maxRating: 5,
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (rating) {},
+                                          ignoreGestures: true,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 4.0),
+                                    Text(review.noiDung ?? 'noiDung is NULL')
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 4.0),
-                              Text(review.noiDung ?? 'noiDung is NULL')
-                            ],
-                          ),
-                        );
-                      },
-                    ),
                   ),
                 )),
           ],

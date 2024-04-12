@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-import '../Model/comment.dart';
 import '../Page/trang_chi_tiet_dac_san.dart';
 import '../Page/trang_dac_san.dart';
 import '../Page/trang_dac_san_theo_tinh.dart';
@@ -15,7 +14,6 @@ import '../Screen/man_hinh_cho_xac_nhan.dart';
 import '../Screen/man_hinh_dang_ky.dart';
 import '../Screen/man_hinh_dang_nhap.dart';
 import '../Screen/man_hinh_gioi_thieu.dart';
-import '../Service/thu_vien_api.dart';
 import '../main.dart';
 
 final rootNavKey = GlobalKey<NavigatorState>();
@@ -46,20 +44,6 @@ final GoRouter router = GoRouter(
         }
       },
       branches: [
-        // StatefulShellBranch(
-        //   navigatorKey: yeuThich,
-        //     routes: [
-        //       GoRoute(
-        //         parentNavigatorKey: dacsanNavKey,
-        //         path: '/dacsan',
-        //         name: "Danh sách đặc sản",
-        //         builder: (context, state) {
-        //           return const TrangDacSan();
-        //       },
-        //       )
-        //     ]
-        //
-        // ),
         StatefulShellBranch(
           navigatorKey: dacsanNavKey,
           routes: [
@@ -126,25 +110,23 @@ final GoRouter router = GoRouter(
           navigatorKey: yeuThichNavKey,
           routes: [
             GoRoute(
-              parentNavigatorKey: yeuThichNavKey,
-              path: '/yeuthich',
-              name: "Danh sách Đặc sản Yêu thích",
-              builder: (context, state) {
-                return const TrangDacSanYeuThich();
-                // return TrangDacSanYeuThich(dsDacSan: dsYeuThich,);
-              },
-              routes: [
-                GoRoute(
-                  path: "chitiet/:id",
-                  name: "Chi tiết đặc sản yêu thích",
-                  builder: (context, state) {
-                  return TrangChiTietDacSan(
-                  maDS: state.pathParameters['id']!,
-                    );
-                  },
-                ),
-              ]
-            )
+                parentNavigatorKey: yeuThichNavKey,
+                path: '/yeuthich',
+                name: "Danh sách Đặc sản Yêu thích",
+                builder: (context, state) {
+                  return const TrangDacSanYeuThich();
+                },
+                routes: [
+                  GoRoute(
+                    path: "chitiet/:id",
+                    name: "Chi tiết đặc sản yêu thích",
+                    builder: (context, state) {
+                      return TrangChiTietDacSan(
+                        maDS: state.pathParameters['id']!,
+                      );
+                    },
+                  ),
+                ])
           ],
         ),
         StatefulShellBranch(

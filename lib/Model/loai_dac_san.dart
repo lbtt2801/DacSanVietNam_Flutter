@@ -1,5 +1,6 @@
 class LoaiDacSan {
-  String idLoaiDS ;
+  String idLoaiDS;
+
   String tenLoaiDS;
 
   LoaiDacSan({

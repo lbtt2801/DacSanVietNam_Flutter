@@ -4,9 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../Model/dac_san.dart';
 import '../Service/thu_vien_api.dart';
 import '../Service/thu_vien_widget.dart';
-import '../main.dart';
 import '../Widget/ShowStar.dart';
-
+import '../main.dart';
 
 class TrangDanhSachDacSan extends StatefulWidget {
   const TrangDanhSachDacSan({
@@ -16,24 +15,26 @@ class TrangDanhSachDacSan extends StatefulWidget {
     this.thanhPhan,
     this.noiBat,
   });
+
   final String? ten;
   final String? thanhPhan;
   final int? xuatSu;
   final bool? noiBat;
+
   @override
   State<TrangDanhSachDacSan> createState() => _TrangDanhSachDacSanState();
 }
 
 class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
   List<DacSan> dsDacSanDaLoc = dsDacSan;
+
   @override
   void initState() {
     // TODO: implement initState
     if (widget.ten != null) {
       dsDacSanDaLoc = dsDacSanDaLoc
-          .where((element) => element.tenDS!
-              .toLowerCase()
-              .contains(widget.ten!.toLowerCase()))
+          .where((element) =>
+              element.tenDS!.toLowerCase().contains(widget.ten!.toLowerCase()))
           .toList();
     }
     if (widget.thanhPhan != null) {
@@ -70,7 +71,7 @@ class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
         itemCount: dsDacSanDaLoc.length,
         itemBuilder: (context, index) {
           return InkWell(
-            onTap: () => context.go("/dacsan/chitiet/${index + 1}"),
+            onTap: () => context.go("/dacsan/chitiet/${dsDacSanDaLoc[index].idDacSan}"),
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 vertical: 15,
@@ -90,9 +91,8 @@ class _TrangDanhSachDacSanState extends State<TrangDanhSachDacSan> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      "Xuất xứ: ${getTenTinhTuID(dsDacSanDaLoc[index].idTinh!)
-                      }",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    "Xuất xứ: ${getTenTinhTuID(dsDacSanDaLoc[index].idTinh!)}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   starNumber(dsDacSanDaLoc[index].sao!),
                 ],

@@ -1,5 +1,4 @@
-class DacSanLuu
-{
+class DacSanLuu {
   int? idUser;
   int? idDacSan;
 

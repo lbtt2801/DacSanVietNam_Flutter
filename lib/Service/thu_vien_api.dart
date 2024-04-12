@@ -112,8 +112,8 @@ Future<void> removeFavorite(String idUser, String idDacSan) async {
 }
 
 Future<void> getVung() async {
-  var reponse = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getVungAPI.php')); //https://cntt199.000webhostapp.com/getVungMien.php
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getVungAPI.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -124,8 +124,8 @@ Future<void> getVung() async {
 
 Future<void> getLoaiDacSan() async {
   dsLoaiDacSan.insert(0, LoaiDacSan(idLoaiDS: 'all', tenLoaiDS: 'Tất cả'));
-  var reponse = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getLoaiDacSan.php')); //https://cntt199.000webhostapp.com/getLoaiDacSan.php
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getLoaiDacSan.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -135,13 +135,13 @@ Future<void> getLoaiDacSan() async {
 }
 
 Future<void> getDacSan() async {
-  var reponse = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getDacSanAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getDacSanAPI.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
     DacSan dacSan = DacSan.fromJson(document);
-    if(dacSan.trangThai == "1") {
+    if (dacSan.trangThai == "1") {
       dsDacSan.add(dacSan);
     }
   }
@@ -163,20 +163,46 @@ Future<void> postComment(String soSao, String noiDung, String thoiGian,
   print('---------------------- postComment ----------------');
 }
 
+Future<void> updateComment(String soSao, String noiDung, String thoiGian,
+    String idDacSan, String idUser) async {
+  Map<String, dynamic> data = {
+    'SoSao': soSao,
+    'NoiDung': noiDung,
+    'ThoiGian': thoiGian,
+    'IDDacSan': idDacSan,
+    'IDUsers': idUser,
+  };
+
+  var url =
+      Uri.parse('https://cntt199.000webhostapp.com/api/updateComment.php');
+  await post(url, body: data);
+
+  print('---------------------- updateComment ----------------');
+}
+
 Future<void> getComment() async {
-  var reponse = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getCommentAPI.php')); //https://cntt199.000webhostapp.com/getDacSan.php
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getCommentAPI.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
-  if(dsComment.isNotEmpty) dsComment.clear();
+  if (dsComment.isNotEmpty) dsComment.clear();
   for (var document in result) {
     Comment comment = Comment.fromJson(document);
     // if(comment.trangThai == "1") {
-      dsComment.add(comment);
+    dsComment.add(comment);
     // }
   }
 
   print('---------------------- getComment ----------------');
+}
+
+getDSCommentFollowIDUser(String idUser) {
+  if (dsCommentIdUser.isNotEmpty) dsCommentIdUser.clear();
+  for (Comment cm in dsComment) {
+    if (cm.idUser == idUser) {
+      dsCommentIdUser.add(cm);
+    }
+  }
 }
 
 List<DacSan> getDanhSachDacSanTheoTen(String ten) {
@@ -233,8 +259,8 @@ DacSan getDacSanTheoID(String idDacSan) {
 }
 
 Future<void> getHinhAnh() async {
-  var reponse = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getHinhAPI.php')); //https://cntt199.000webhostapp.com/getHinhAnh.php
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getHinhAPI.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {
@@ -266,8 +292,8 @@ String? getTenTinh(String? idTinh) {
 }
 
 Future<void> getTinhThanh() async {
-  var reponse = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getTinhAPI.php')); // https://cntt199.000webhostapp.com/getTinhThanh.php
+  var reponse = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getTinhAPI.php'));
   var result = json.decode(utf8.decode(reponse.bodyBytes));
 
   for (var document in result) {

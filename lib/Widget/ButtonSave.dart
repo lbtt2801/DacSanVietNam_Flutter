@@ -34,16 +34,31 @@ class _ButtonSaveState extends State<ButtonSave> {
       color: Colors.red,
       icon: Icon(isCheck ? Icons.favorite : Icons.favorite_outline),
       onPressed: () async {
-        setState(() {
-          isCheck = !isCheck;
-          print(dsYeuThich.length);
-        });
-        if (isCheck) {
-          await addFavorite(widget.idDacSan, widget.idUser);
+        if (nguoiDung.uid != idGuest) {
+          setState(() {
+            isCheck = !isCheck;
+          });
+          if (isCheck) {
+            await addFavorite(widget.idDacSan, widget.idUser);
+          } else {
+            await removeFavorite(widget.idUser, widget.idDacSan);
+          }
+          await getFavorite(widget.idUser);
         } else {
-          await removeFavorite(widget.idUser, widget.idDacSan);
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Thông báo', style: TextStyle(fontSize: 20),),
+              content: const Text('Bạn phải đăng nhập để thực hiện tính năng này!', style: TextStyle(fontSize: 16, color: Colors.orange),),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
         }
-        await getFavorite(widget.idUser);
         provder.addDS(dsYeuThich);
       },
     );

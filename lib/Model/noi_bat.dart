@@ -1,5 +1,4 @@
-class NoiBat
-{
+class NoiBat {
   String? idNoiBat;
   String? idDacSan;
 

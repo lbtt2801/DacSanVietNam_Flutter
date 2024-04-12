@@ -17,7 +17,6 @@ import '../Model/nguoi_dung.dart';
 import '../Screen/man_hinh_dang_ky.dart';
 import '../Service/thu_vien_style.dart';
 import '../Service/thu_vien_widget.dart';
-import '../Widget/HorizontalGapSizedBox.dart';
 import '../Widget/VerticalGapSizedBox.dart';
 
 class ManHinhDangNhap extends StatefulWidget {
@@ -172,13 +171,31 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
                   child: const Text("Đăng ký")),
               VerticalGapSizedBox(),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
                     style: ButtonStyle(
                         maximumSize:
-                        MaterialStateProperty.all(const Size(56, 56))),
-                    onPressed: DangNhapGoogle,
+                            MaterialStateProperty.all(const Size(56, 56))),
+                    onPressed: () async {
+                      try {
+                        User? user = (await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                          email: 'kencity6@gmail.com',
+                          password: '123456',
+                        ))
+                            .user;
+
+                        if (user != null && context.mounted) {
+                          context.go("/");
+                        }
+                      } on FirebaseAuthException catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(snackBarFirebaseAuth(e));
+                        }
+                      }
+                    },
                     icon: LoadHinh("assets/images/guest.png"),
                   ),
                   IconButton(
@@ -188,7 +205,6 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
                     onPressed: DangNhapGoogle,
                     icon: LoadHinh("assets/images/google.png"),
                   ),
-                  HorizontalGapSizedBox(),
                   IconButton(
                     style: ButtonStyle(
                         maximumSize:

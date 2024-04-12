@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -28,8 +27,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
   String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
   List<DacSan> lstDacSan = dsDacSan;
   List<TinhThanh> dsTinhLocal = dsTinhThanh;
-  List<String> DSMien = ["Bắc", "Trung", "Nam"];
-  String Address = ' 👈 Lấy vị trí hiện tại';
+  String address = ' 👈 Lấy vị trí hiện tại';
 
   void getUserAddress() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -46,10 +44,10 @@ class _TrangDacSanState extends State<TrangDacSan> {
         desiredAccuracy: LocationAccuracy.high);
     try {
       List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       if (placemarks.isNotEmpty) {
         setState(() {
-          Address = placemarks.first.administrativeArea!;
+          address = placemarks.first.administrativeArea!;
         });
       } else {
         if (kDebugMode) {
@@ -91,13 +89,13 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   IconButton(
                     style: ButtonStyle(
                         maximumSize:
-                        MaterialStateProperty.all(const Size(40, 40))),
+                            MaterialStateProperty.all(const Size(40, 40))),
                     onPressed: () async {
                       getUserAddress();
                     },
                     icon: LoadHinh("assets/images/ic_location.png"),
                   ),
-                  Text(Address.toString(),
+                  Text(address.toString(),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.lightBlue,
@@ -106,10 +104,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
               ),
               CarouselSlider(
                 options: CarouselOptions(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.2 + 30,
+                  height: MediaQuery.of(context).size.height * 0.2 + 30,
                   animateToClosest: true,
                   pageSnapping: true,
                   enableInfiniteScroll: true,
@@ -142,9 +137,8 @@ class _TrangDacSanState extends State<TrangDacSan> {
       children: [
         headerVungMien(vung),
         TinhList(
-            lstTinhThanh: dsTinhLocal
-                .where((tt) => tt.idVung == vung.idVung).toList()
-        )
+            lstTinhThanh:
+                dsTinhLocal.where((tt) => tt.idVung == vung.idVung).toList())
       ],
     );
   }
@@ -165,22 +159,20 @@ class _TrangDacSanState extends State<TrangDacSan> {
               children: [
                 Text("------- Đặc sản quanh bạn -------",
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.lightBlue,
-                      fontSize: 20
-                    )),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlue,
+                        fontSize: 20)),
               ],
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            bottom: 10,
-          ),
-          child: DacSanList(
-            lstDacSan: getIDTuTenTinh(Address),
-          )
-        )
+            padding: const EdgeInsets.only(
+              bottom: 10,
+            ),
+            child: DacSanList(
+              lstDacSan: getIDTuTenTinh(address),
+            ))
       ],
     );
   }
@@ -203,19 +195,10 @@ class _TrangDacSanState extends State<TrangDacSan> {
                   ),
                 ),
               ),
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.1,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.05,
+                  horizontal: MediaQuery.of(context).size.width * 0.05,
                   vertical: 5),
               child: InkWell(
                 onTap: () {
@@ -266,9 +249,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                         style: TextStyle(
                           color: isSelected
                               ? Colors.white
-                              : Theme
-                              .of(context)
-                              .disabledColor,
+                              : Theme.of(context).disabledColor,
                         ),
                       ),
                       selected: isSelected,
@@ -276,7 +257,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                         selectChip(loaiDacSan);
                         lstDacSan = dsDacSan
                             .where((dacSan) =>
-                        dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
+                                dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
                             .toList();
                       },
                       selectedColor: Colors.blue,
@@ -297,7 +278,8 @@ class _TrangDacSanState extends State<TrangDacSan> {
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: <Widget>[
-          Text(vungMien.tenVung!,
+          Text(
+            vungMien.tenVung!,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -305,7 +287,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
               // overflow: TextOverflow.fade,
             ),
             overflow: TextOverflow.ellipsis,
-            ),
+          ),
           const Spacer(),
           // use Spacer
           // TextButton(
@@ -338,9 +320,7 @@ class TinhList extends StatelessWidget {
         SizedBox(
           height: 250,
           child: Container(
-            color: Theme
-                .of(context)
-                .brightness == Brightness.light
+            color: Theme.of(context).brightness == Brightness.light
                 ? Colors.lightBlue.shade100
                 : const Color.fromARGB(155, 135, 206, 250),
             child: ListView.builder(
@@ -348,10 +328,10 @@ class TinhList extends StatelessWidget {
               itemCount: lstTinhThanh.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                  onTap: () =>
-                  {
+                  onTap: () => {
                     getCommentsFollowIDDacSan(1),
-                    context.go("/dacsan/tinhThanh/${lstTinhThanh[index].idTinh!}")
+                    context
+                        .go("/dacsan/tinhThanh/${lstTinhThanh[index].idTinh!}")
                   },
                   child: Card(
                     margin: const EdgeInsets.all(10),
@@ -366,11 +346,11 @@ class TinhList extends StatelessWidget {
                         children: [
                           Center(
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: cachedImage(lstTinhThanh[index].linkAnh!)
-                            ),
+                                borderRadius: BorderRadius.circular(8),
+                                child:
+                                    cachedImage(lstTinhThanh[index].linkAnh!)),
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Padding(
                             padding: const EdgeInsets.only(left: 10.0),
                             child: Text(lstTinhThanh[index].tenTinh!,
@@ -378,8 +358,7 @@ class TinhList extends StatelessWidget {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 19,
-                                )
-                            ),
+                                )),
                           ),
                         ],
                       ),
@@ -407,81 +386,94 @@ class DacSanList extends StatelessWidget {
         SizedBox(
           height: 265,
           child: Container(
-            color: Theme
-                .of(context)
-                .brightness == Brightness.light
+            color: Theme.of(context).brightness == Brightness.light
                 ? Colors.lightBlue.shade100
                 : const Color.fromARGB(155, 135, 206, 250),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: lstDacSan.length,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () =>
-                  {
-                    // getCommentsFollowIDDacSan(1),
-                    context.go("/dacsan/chitiet/${lstDacSan[index].idDacSan}")
-                  },
-                  child: Expanded(
-                    child: Card(
-                      margin: const EdgeInsets.all(10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+            child: lstDacSan.isEmpty
+                ? ListTile(
+                    shape: LinearBorder.bottom(
+                      side: const BorderSide(
+                        color: Color.fromARGB(155, 211, 211, 211),
                       ),
-                      child: Container(
-                        width: 290,
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: cachedImage(lstDacSan[index].avatar!)
-                              ),
+                    ),
+                    title: const Text(
+                      'Không tìm thấy Đặc sản liên quan (T_T)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.red),
+                    ),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: lstDacSan.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () => {
+                          context.go(
+                              "/dacsan/chitiet/${lstDacSan[index].idDacSan}")
+                        },
+                        child: Expanded(
+                          child: Card(
+                            margin: const EdgeInsets.all(10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            SizedBox(height: 13),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Row(
+                            child: Container(
+                              width: 290,
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(lstDacSan[index].tenDS!,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      )
+                                  Center(
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: cachedImage(
+                                            lstDacSan[index].avatar!)),
                                   ),
-                                  const Spacer(),
-                                  Row(
-                                    children: [
-                                        Text(
-                                        lstDacSan[index].sao.toString(),
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey, // Màu xám hoặc màu tùy chọn của bạn
+                                  const SizedBox(height: 13),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Row(
+                                      children: [
+                                        Text(lstDacSan[index].tenDS!,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            )),
+                                        const Spacer(),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              lstDacSan[index].sao.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors
+                                                    .grey, // Màu xám hoặc màu tùy chọn của bạn
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
                                         ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                    ],
+                                        const Icon(
+                                          Icons.star,
+                                          color: Colors.yellow,
+                                          size: 27,
+                                          weight: 10,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 27,
-                                    weight: 10,
-                                  )
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ),
       ],

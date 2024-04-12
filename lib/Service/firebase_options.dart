@@ -44,23 +44,25 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDbOO5dKhoiF8kmDrnbigTKsTmj_8xSPDg',
-    appId: '1:132894885676:web:659f463a6d8ac6aa3ece89',
-    messagingSenderId: '132894885676',
-    projectId: 'musicplayerz-63f2e',
-    authDomain: 'musicplayerz-63f2e.firebaseapp.com',
-    databaseURL: 'https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'musicplayerz-63f2e.appspot.com',
+    apiKey: 'AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8',
+    appId: '1:41890746519:android:e985a7d3cee3b3e61199d2',
+    messagingSenderId: '41890746519',
+    projectId: 'dacsanvietnam-6ee19',
+    authDomain: 'dacsanvietnam-6ee19.firebaseapp.com',
+    databaseURL:
+        'https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'dacsanvietnam-6ee19.appspot.com',
     measurementId: 'G-ES189ZW8QH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDqL2eDQ3jcssbQVQMaLCSmagG5ZqNPk4E',
-    appId: '1:132894885676:android:d3bd4cb7b9b07ce63ece89',
-    messagingSenderId: '132894885676',
-    projectId: 'musicplayerz-63f2e',
-    databaseURL: 'https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'musicplayerz-63f2e.appspot.com',
+    apiKey: 'AIzaSyD6xZFLLjERzWa0WljNz1Bes4w_YEwLLa8',
+    appId: '1:41890746519:android:e985a7d3cee3b3e61199d2',
+    messagingSenderId: '41890746519',
+    projectId: 'dacsanvietnam-6ee19',
+    databaseURL:
+        'https://dacsanvietnam-6ee19-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'dacsanvietnam-6ee19.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -68,9 +70,11 @@ class DefaultFirebaseOptions {
     appId: '1:132894885676:ios:a922404cd85288db3ece89',
     messagingSenderId: '132894885676',
     projectId: 'musicplayerz-63f2e',
-    databaseURL: 'https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'musicplayerz-63f2e.appspot.com',
-    iosClientId: '132894885676-25skfndv5f9c0300486aj8rfd602sqpn.apps.googleusercontent.com',
+    iosClientId:
+        '132894885676-25skfndv5f9c0300486aj8rfd602sqpn.apps.googleusercontent.com',
     iosBundleId: 'nhom24.doan2023199.appDacSan',
   );
 
@@ -79,9 +83,11 @@ class DefaultFirebaseOptions {
     appId: '1:132894885676:ios:55342214b40ec56a3ece89',
     messagingSenderId: '132894885676',
     projectId: 'musicplayerz-63f2e',
-    databaseURL: 'https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://musicplayerz-63f2e-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'musicplayerz-63f2e.appspot.com',
-    iosClientId: '132894885676-ofasldc49pkcl6pf4mklpjv33fosp9n4.apps.googleusercontent.com',
+    iosClientId:
+        '132894885676-ofasldc49pkcl6pf4mklpjv33fosp9n4.apps.googleusercontent.com',
     iosBundleId: 'nhom24.doan2023199.appDacSan.RunnerTests',
   );
 }

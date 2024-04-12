@@ -9,6 +9,7 @@ import '../Widget/VerticalGapSizedBox.dart';
 
 class TrangDoiMatKhau extends StatefulWidget {
   TrangDoiMatKhau({super.key, required this.uid});
+
   final String? uid;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
@@ -16,12 +17,14 @@ class TrangDoiMatKhau extends StatefulWidget {
   final TextEditingController matKhauMoiController = TextEditingController();
   final TextEditingController matKhauMoiXacNhanController =
       TextEditingController();
+
   @override
   _TrangDoiMatKhauState createState() => _TrangDoiMatKhauState();
 }
 
 class _TrangDoiMatKhauState extends State<TrangDoiMatKhau> {
   bool hidePassword = false;
+
   @override
   Widget build(BuildContext context) {
     if (widget.uid != null) {

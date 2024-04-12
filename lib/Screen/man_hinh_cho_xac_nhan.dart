@@ -14,7 +14,9 @@ class ManHinhChoXacNhan extends StatefulWidget {
     super.key,
     required this.user,
   });
+
   final User user;
+
   @override
   _ManHinhChoXacNhanState createState() => _ManHinhChoXacNhanState();
 }

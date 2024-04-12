@@ -9,7 +9,6 @@ import '../Service/thu_vien_widget.dart';
 import '../Widget/ShowStar.dart';
 import '../main.dart';
 
-
 class TrangDacSanTheoTinh extends StatefulWidget {
   final String maTinh;
 
@@ -45,15 +44,14 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          SizedBox(
             height: 200,
             width: double.infinity,
-            child: Image.network(
-                tinhThanh.linkAnh!,
+            child: Image.network(tinhThanh.linkAnh!,
                 fit: BoxFit.cover,
                 width: 150, // Đặt chiều rộng mong muốn
                 height: 100),
-            ),
+          ),
           headerLoaiDacSan(),
           Expanded(
             child: ListView.builder(
@@ -85,10 +83,10 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                                dacSan.sao!.toString(),
-                              style: TextStyle(fontSize: 18),
+                              dacSan.sao!.toString(),
+                              style: const TextStyle(fontSize: 18),
                             ),
-                            SizedBox(width: 6),
+                            const SizedBox(width: 6),
                             starNumber(dacSan.sao!),
                           ],
                         ),
@@ -156,12 +154,12 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
                       selected: isSelected,
                       onSelected: (selected) {
                         selectChip(loaiDacSan);
-                        if (loaiDacSan.tenLoaiDS == "Tất cả")
+                        if (loaiDacSan.tenLoaiDS == "Tất cả") {
                           filteredDacSan = lstDacSan;
-                        else{
+                        } else {
                           filteredDacSan = lstDacSan
                               .where((dacSan) =>
-                          dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
+                                  dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
                               .toList();
                         }
                       },

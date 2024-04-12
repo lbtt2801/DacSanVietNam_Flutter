@@ -1,14 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names
 
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart';
 import 'package:vinaFoods/main.dart';
 
 import '../Model/tinh_thanh.dart';
@@ -23,6 +19,7 @@ class ManHinhDangKy extends StatefulWidget {
     this.uid,
     this.email,
   });
+
   String? uid;
   String? email;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -60,7 +57,6 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
   @override
   Widget build(BuildContext context) {
     final List<String> dsLabelTinhThanh = [];
-    print(dsTinhThanh.length);
     for (var tinhThanh in dsTinhThanh) {
       dsLabelTinhThanh.add(
         tinhThanh.tenTinh!,
