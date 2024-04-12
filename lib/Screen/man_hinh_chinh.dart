@@ -39,9 +39,9 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
         await getDacSan();
         await getComment();
         await getDSUser();
-        await getFavorite(FirebaseAuth.instance.currentUser!.uid);
         await getNoiBan();
         nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;
+        await getFavorite(nguoiDung.uid);
         return "";
       },
     );

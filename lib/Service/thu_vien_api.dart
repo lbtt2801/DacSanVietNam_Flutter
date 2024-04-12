@@ -11,6 +11,8 @@ import '../Model/nguoi_dung.dart';
 import '../Model/tinh_thanh.dart';
 import '../Model/vung_mien.dart';
 import '../main.dart';
+import 'package:provider/provider.dart';
+
 
 Future<void> addUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {
@@ -81,12 +83,12 @@ Future<void> addFavorite(String idDacSan, String idUser) async {
 }
 
 Future<void> getFavorite(String idUser) async {
+  dsYeuThich.clear();
   var response = await get(Uri.parse(
       'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser')); //https://cntt199.000webhostapp.com/getVungMien.php
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
     List<String> lst = List<String>.from(data);
-
     for (String id in lst) {
       DacSan? dacSan = getDacSanTheoID(id);
       dsYeuThich.add(dacSan);
@@ -94,8 +96,8 @@ Future<void> getFavorite(String idUser) async {
   } else {
     throw Exception('Failed to fetch data');
   }
+  print('---------------------- getFavorite ---------------------------------- ');
 
-  print('---------------------- getFavorite ----------------${dsYeuThich[0]} ------------------ ');
 }
 
 Future<void> getVung() async {

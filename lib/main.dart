@@ -17,6 +17,10 @@ import 'Model/noi_ban.dart';
 import 'Model/tinh_thanh.dart';
 import 'Model/vung_mien.dart';
 import 'Router/router_config.dart';
+import 'Model/CounterModel.dart';
+import 'package:provider/provider.dart';
+
+
 
 late final SharedPreferences ref;
 List<Vung> dsVungMien = [];
@@ -34,8 +38,10 @@ List<DacSan> dsYeuThich = [];
 List<Comment> dsComment = [];
 late NguoiDung nguoiDung;
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
 
   await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -53,7 +59,12 @@ Future<void> main() async {
 
   // deleteUser("NzUeEuQvJiY9e6SOET96Jajv0Ur2");
 
-  runApp(const MainApp());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => addDSLuu(),
+        child :const MainApp(),
+      ),
+  );
 }
 
 class MainApp extends StatefulWidget {

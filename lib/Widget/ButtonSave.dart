@@ -3,6 +3,9 @@ import 'package:vinaFoods/main.dart';
 
 import '../Model/dac_san.dart';
 import '../Service/thu_vien_api.dart';
+import 'package:provider/provider.dart';
+import '../Model/CounterModel.dart';
+
 
 class ButtonSave extends StatefulWidget {
   final String idDacSan;
@@ -29,6 +32,7 @@ class _ButtonSaveState extends State<ButtonSave> {
 
   @override
   Widget build(BuildContext context) {
+    final counterModel = Provider.of<addDSLuu>(context);
     return IconButton(
       iconSize: 37,
       color: Colors.red,
@@ -38,6 +42,8 @@ class _ButtonSaveState extends State<ButtonSave> {
           isCheck = !isCheck;
           addFavorite(widget.idDacSan, widget.idUser);
           getFavorite(widget.idUser);
+
+          // counterModel.addDS(widget.idDacSan, widget.idUser);
         });
       },
     );

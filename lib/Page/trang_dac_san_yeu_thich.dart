@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vinaFoods/Model/dac_san.dart';
 
 import '../Service/thu_vien_widget.dart';
 import '../Widget/ShowStar.dart';
 import '../main.dart';
+import 'package:provider/provider.dart';
+import '../Model/CounterModel.dart';
+
 
 class TrangDacSanYeuThich extends StatefulWidget {
   const TrangDacSanYeuThich({super.key});
@@ -13,19 +18,35 @@ class TrangDacSanYeuThich extends StatefulWidget {
 }
 
 class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
+  late List<DacSan> DSYeuThich;
+
+
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      dsYeuThich = dsYeuThich;
+      DSYeuThich = dsYeuThich;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final counterModel = Provider.of<addDSLuu>(context);
     return Scaffold(
       body: Column(
         children: [
+          Container(
+            child: ElevatedButton(
+                onPressed: () {
+                setState(() {
+                  DSYeuThich = dsYeuThich;
+                }
+              );
+            },
+              child: Text('Load lại trang'),
+            ),
+          ),
           ListTile(
             shape: LinearBorder.bottom(
               side: const BorderSide(
@@ -42,7 +63,7 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
             ),
           ),
           Expanded(
-            child: dsYeuThich.isEmpty
+            child: counterModel.dataList.isEmpty
                 ? ListTile(
                     shape: LinearBorder.bottom(
                       side: const BorderSide(
@@ -59,9 +80,9 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: dsYeuThich.length,
+                    itemCount: counterModel.dataList.length,
                     itemBuilder: (context, index) {
-                      final dacSan = dsYeuThich[index];
+                      final dacSan = counterModel.dataList[index];
 
                       return InkWell(
                         onTap: () =>
