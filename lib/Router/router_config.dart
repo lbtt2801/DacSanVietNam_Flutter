@@ -133,6 +133,17 @@ final GoRouter router = GoRouter(
                 return const TrangDacSanYeuThich();
                 // return TrangDacSanYeuThich(dsDacSan: dsYeuThich,);
               },
+              routes: [
+                GoRoute(
+                  path: "chitiet/:id",
+                  name: "Chi tiết đặc sản yêu thích",
+                  builder: (context, state) {
+                  return TrangChiTietDacSan(
+                  maDS: state.pathParameters['id']!,
+                    );
+                  },
+                ),
+              ]
             )
           ],
         ),

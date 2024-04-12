@@ -141,7 +141,9 @@ Future<void> getDacSan() async {
 
   for (var document in result) {
     DacSan dacSan = DacSan.fromJson(document);
-    dsDacSan.add(dacSan);
+    if(dacSan.trangThai == "1") {
+      dsDacSan.add(dacSan);
+    }
   }
 }
 
@@ -169,7 +171,9 @@ Future<void> getComment() async {
   if(dsComment.isNotEmpty) dsComment.clear();
   for (var document in result) {
     Comment comment = Comment.fromJson(document);
-    dsComment.add(comment);
+    // if(comment.trangThai == "1") {
+      dsComment.add(comment);
+    // }
   }
 
   print('---------------------- getComment ----------------');

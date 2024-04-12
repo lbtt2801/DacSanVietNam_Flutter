@@ -4,6 +4,7 @@ class Comment {
   final String? thoiGian;
   final String idDacSan;
   final String idUser;
+  // final String trangThai;
 
   Comment( {
     required this.soSao,
@@ -11,6 +12,8 @@ class Comment {
     required this.thoiGian,
     required this.idDacSan,
     required this.idUser,
+    // required this.trangThai,
+
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
@@ -20,6 +23,7 @@ class Comment {
       thoiGian: json['ThoiGian'],
       idDacSan: json['IDDacSan'],
       idUser: json['IDUsers'],
+        // trangThai = int.parse(json['TrangThai'] ?? '1');
     );
   }
 }

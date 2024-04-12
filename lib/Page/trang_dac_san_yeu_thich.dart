@@ -74,7 +74,7 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
 
                       return InkWell(
                         onTap: () =>
-                            context.go("/dacsan/chitiet/${dacSan.idDacSan}"),
+                            context.go("/yeuthich/chitiet/${dacSan.idDacSan}"),
                         child: SizedBox(
                           child: Dismissible(
                             key: Key(dacSan.tenDS!),
