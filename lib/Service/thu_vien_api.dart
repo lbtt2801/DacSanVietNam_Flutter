@@ -199,7 +199,9 @@ Future<void> getFavorite(String idUser) async {
       }
       return;
     } else {
-      throw Exception('Failed to fetch data');
+      if (kDebugMode) {
+        print('Error getting Favorite: ${response.statusCode}');
+      }
     }
     retryCount++;
     await Future.delayed(retryDelay);
@@ -305,6 +307,40 @@ Future<void> getDacSan() async {
       print('Error - CallBack');
     }
     Timer(const Duration(seconds: 1), getDacSan);
+  }
+}
+
+Future<void> updatePropsSao(String idDacSan, String soSao) async {
+  Map<String, dynamic> data = {
+    'IDDacSan': idDacSan,
+    'Sao': soSao,
+  };
+
+  var url =
+      Uri.parse('https://cntt199.000webhostapp.com/api/updatePropsSao.php');
+
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await post(url, body: data);
+
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('---------------------- updatePropsSao ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error updating Props Sao: ${response.statusCode}');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to update Props Sao after $maxRetryCount attempts');
   }
 }
 
@@ -433,6 +469,17 @@ void updateListCommentIdUser(List<Comment> listData, String soSao,
   }
 }
 
+List<DacSan> updateListDacSan(
+    List<DacSan> listData, double soSao, String idDacSan) {
+  for (int i = 0; i < listData.length; i++) {
+    if (listData[i].idDacSan == idDacSan) {
+      listData[i].sao = soSao;
+      break;
+    }
+  }
+  return listData;
+}
+
 DacSan getDacSanTheoID(String idDacSan) {
   for (var dacSan in dsDacSan) {
     if (dacSan.idDacSan == idDacSan) {
@@ -489,25 +536,35 @@ Future<void> getNoiBan() async {
 }
 
 Future<void> getTinhThanh() async {
-  var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getTinhAPI.php'));
-  if (response.statusCode == 200) {
-    var result = json.decode(utf8.decode(response.bodyBytes));
+  try {
+    var response = await get(
+        Uri.parse('https://cntt199.000webhostapp.com/api/getTinhAPI.php'));
+    if (response.statusCode == 200) {
+      var result = json.decode(utf8.decode(response.bodyBytes));
 
-    for (var document in result) {
-      TinhThanh tinhThanh = TinhThanh.fromJson(document);
-      dsTinhThanh.add(tinhThanh);
-    }
+      for (var document in result) {
+        TinhThanh tinhThanh = TinhThanh.fromJson(document);
+        dsTinhThanh.add(tinhThanh);
+      }
 
-    if (kDebugMode) {
-      print('---------------------- getTinhThanh ----------------------');
+      if (kDebugMode) {
+        print('---------------------- getTinhThanh ----------------------');
+      }
+    } else {
+      if (kDebugMode) {
+        print('Error: ${response.statusCode}');
+        print('Error - CallBack');
+      }
+      Timer(const Duration(seconds: 1), getTinhThanh);
     }
-  } else {
-    if (kDebugMode) {
-      print('Error: ${response.statusCode}');
-      print('Error - CallBack');
+  } catch (error) {
+    if (error is SocketException) {
+      showCustomToast('Kết nối mạng có vấn đề. Vui lòng thử lại sau!');
+    } else if (error is ClientException) {
+      showCustomToast('ClientException. Vui lòng thử lại sau!');
+    } else {
+      showCustomToast('Lỗi không xác định. Vui lòng thử lại sau!');
     }
-    Timer(const Duration(seconds: 1), getTinhThanh);
   }
 }
 
@@ -529,18 +586,30 @@ List<String?> getTinhTuVung(String? idVung) {
   return tenTinhList;
 }
 
-List<DacSan> getIDTuTenTinh(String? tenTinh) {
-  if (tenTinh == ' 👈 Lấy vị trí hiện tại') {
-    return dsDacSan;
+List<DacSan> getListDacSanTuTenTinh(String tenTinh, List<DacSan> dacSans) {
+  List<DacSan> dsFilter = [];
+  TinhThanh tinhThanh = TinhThanh();
+
+  tinhThanh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh,
+      orElse: () => tinhThanh);
+
+  if (tinhThanh.idTinh == null) {
+    return dsFilter;
   }
 
-  TinhThanh? tinhThanh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh);
-
-  List<DacSan> dsFilter =
-      dsDacSan.where((ds) => ds.idTinh == tinhThanh.idTinh).toList();
-
+  dsFilter = dacSans.where((ds) => ds.idTinh == tinhThanh.idTinh).toList();
   return dsFilter;
 }
+
+// void getListDacSanTuTenTinh(String tenTinh, List<DacSan> dacSans) {
+//   dsGanBan = [];
+//   TinhThanh tinhThanh = TinhThanh();
+//
+//   tinhThanh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh,
+//       orElse: () => tinhThanh);
+//
+//   dsGanBan = dacSans.where((ds) => ds.idTinh == tinhThanh.idTinh).toList();
+// }
 
 // Lấy tên tỉnh từ ID
 String getTenTinhTuID(String? idTinh) {
@@ -565,6 +634,7 @@ TinhThanh getTinhTuID(String id) {
   TinhThanh tt = dsTinhThanh.firstWhere((ds) => ds.idTinh == id);
   return tt;
 }
+
 // Toast
 void showCustomToast(String message) {
   Fluttertoast.showToast(
@@ -575,4 +645,19 @@ void showCustomToast(String message) {
     textColor: Colors.white,
     fontSize: 16.0,
   );
+}
+
+// update props Sao of DacSan
+double updateSaoDacSan(List<Comment> comments, String idDacSan) {
+  DacSan dacSan = getDacSanTheoID(idDacSan);
+
+  double total = 0;
+  for (Comment comment in comments) {
+    total += double.tryParse(comment.soSao ?? '0.0') ?? 0.0;
+  }
+
+  dacSan.sao = total / comments.length;
+  String format = dacSan.sao?.toStringAsFixed(1) ?? '0.0';
+  dacSan.sao = double.parse(format);
+  return dacSan.sao ?? 0.0;
 }

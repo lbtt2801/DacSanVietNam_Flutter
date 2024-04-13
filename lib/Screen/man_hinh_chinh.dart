@@ -81,10 +81,10 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
-                onTap: () {
-                  context.go('/');
-                  selectedIndex = 0;
-                },
+                // onTap: () {
+                //   context.go('/');
+                //   selectedIndex = 0;
+                // },
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 20,
@@ -205,14 +205,16 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       unselectedItemColor: Colors.white60,
       onTap: (value) {
         switch (value) {
-          case 0: {
-            getComment();
-            selectedIndex != 0 ? context.go('/') : context.pop();
-            break;
-          }
-          case 1: {
-            selectedIndex != 1 ? context.go('/') : context.pop();
-          }
+          case 0:
+            {
+              getComment();
+              selectedIndex != 0 ? context.go('/') : context.pop();
+              break;
+            }
+          case 1:
+            {
+              selectedIndex != 1 ? context.go('/') : context.pop();
+            }
         }
 
         setState(() {

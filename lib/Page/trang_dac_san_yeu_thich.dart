@@ -31,7 +31,7 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ThuVienProvider>(context);
-    List<DacSan> dacSans = provider.listYeuThich;
+    List<DacSan> dacSans = provider.listFavorite;
     return Scaffold(
       body: Column(
         children: [
@@ -85,7 +85,7 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                                     nguoiDung.uid,
                                     dacSan
                                         .idDacSan!); // Xóa mục khỏi danh sách khi bị kéo sang ngang
-                                provider.addDS(dsYeuThich);
+                                provider.updateListFavorite(dsYeuThich);
                               });
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

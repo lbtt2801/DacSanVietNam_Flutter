@@ -25,8 +25,8 @@ class _ButtonSaveState extends State<ButtonSave> {
 
   @override
   Widget build(BuildContext context) {
-    final provder = Provider.of<ThuVienProvider>(context);
-    isCheck = provder.listYeuThich.any((ds) => ds.idDacSan == widget.idDacSan);
+    final provider = Provider.of<ThuVienProvider>(context);
+    isCheck = provider.listFavorite.any((ds) => ds.idDacSan == widget.idDacSan);
     return IconButton(
       iconSize: 37,
       color: Colors.red,
@@ -68,7 +68,7 @@ class _ButtonSaveState extends State<ButtonSave> {
             ),
           );
         }
-        provder.addDS(dsYeuThich);
+        provider.updateListFavorite(dsYeuThich);
       },
     );
   }

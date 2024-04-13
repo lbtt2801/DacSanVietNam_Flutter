@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:vinaFoods/Model/dac_san.dart';
 import 'package:vinaFoods/Service/thu_vien_api.dart';
+import 'package:provider/provider.dart';
 
+import '../Model/Provider.dart';
 import '../Model/comment.dart';
 import '../Widget/ButtonSave.dart';
 import '../Widget/ShowNoiBan.dart';
@@ -42,6 +44,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   @override
   Widget build(BuildContext context) {
     bool isCheck = false;
+    final provider = Provider.of<ThuVienProvider>(context);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -313,9 +316,10 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                             .where((cm) =>
                                                 cm.idDacSan == widget.maDS)
                                             .toList();
+
                                         isHasComment
                                             ? updateListCommentIdUser(
-                                            listComment,
+                                                listComment,
                                                 rating.toString(),
                                                 reviewController.text,
                                                 formattedDateTime,
@@ -330,6 +334,14 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                                     thoiGian: formattedDateTime,
                                                     idDacSan: widget.maDS,
                                                     idUser: nguoiDung.uid));
+
+                                        score = updateSaoDacSan(
+                                            listComment, widget.maDS);
+                                        updatePropsSao(
+                                            widget.maDS, score.toString());
+                                        provider.updateListDacSan(
+                                            updateListDacSan(
+                                                dsDacSan, score, widget.maDS));
                                       });
                                     } else {
                                       showDialog<String>(
@@ -356,6 +368,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                         ),
                                       );
                                     }
+                                    FocusScope.of(context).unfocus();
                                   }
                                 : null,
                             child: Text(textButton),

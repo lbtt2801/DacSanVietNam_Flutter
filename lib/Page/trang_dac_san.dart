@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:vinaFoods/Model/tinh_thanh.dart';
 
+import '../Model/Provider.dart';
 import '../Model/dac_san.dart';
 import '../Model/loai_dac_san.dart';
 import '../Model/vung_mien.dart';
@@ -27,6 +29,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
   String selectedChip = dsLoaiDacSan[0].tenLoaiDS;
   List<DacSan> lstDacSan = dsDacSan;
   List<TinhThanh> dsTinhLocal = dsTinhThanh;
+
   String address = ' 👈 Lấy vị trí hiện tại';
 
   void getUserAddress() async {
@@ -74,6 +77,8 @@ class _TrangDacSanState extends State<TrangDacSan> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ThuVienProvider>(context);
+    List<DacSan> dacSans = provider.listDacSan;
     return PopScope(
       onPopInvoked: (popped) {
         ThongBaoXacNhanThoat(context);
@@ -112,7 +117,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
                 ),
                 items: buildBanner(5),
               ),
-              buildDacSanNoiBat(),
+              buildDacSanNoiBat(dacSans: dacSans),
               // headerLoaiDacSan(),
               Column(
                 children: buildDanhSachDacSan(),
@@ -143,7 +148,8 @@ class _TrangDacSanState extends State<TrangDacSan> {
     );
   }
 
-  Column buildDacSanNoiBat() {
+  Column buildDacSanNoiBat({required List<DacSan> dacSans}) {
+    dsGanBan = getListDacSanTuTenTinh(address, dacSans);
     return Column(
       children: [
         Padding(
@@ -171,7 +177,7 @@ class _TrangDacSanState extends State<TrangDacSan> {
               bottom: 10,
             ),
             child: DacSanList(
-              lstDacSan: getIDTuTenTinh(address),
+              lstDacSan: dsGanBan,
             ))
       ],
     );
@@ -218,61 +224,6 @@ class _TrangDacSanState extends State<TrangDacSan> {
     return dsWidget;
   }
 
-  Padding headerLoaiDacSan() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10.0,
-        bottom: 10.0,
-        left: 15.0,
-        right: 0,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(width: 10.0),
-          Flexible(
-            flex: 4,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: dsLoaiDacSan.map((loaiDacSan) {
-                  bool isSelected = loaiDacSan.tenLoaiDS == selectedChip;
-                  return AnimatedContainer(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: FilterChip(
-                      label: Text(
-                        loaiDacSan.tenLoaiDS,
-                        style: TextStyle(
-                          color: isSelected
-                              ? Colors.white
-                              : Theme.of(context).disabledColor,
-                        ),
-                      ),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        selectChip(loaiDacSan);
-                        lstDacSan = dsDacSan
-                            .where((dacSan) =>
-                                dacSan.idLoaiDS == loaiDacSan.idLoaiDS)
-                            .toList();
-                      },
-                      selectedColor: Colors.blue,
-                      checkmarkColor: Colors.white,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Padding headerVungMien(Vung vungMien) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -289,19 +240,6 @@ class _TrangDacSanState extends State<TrangDacSan> {
             overflow: TextOverflow.ellipsis,
           ),
           const Spacer(),
-          // use Spacer
-          // TextButton(
-          //   onPressed: () {
-          //     // context.goNamed(
-          //     //   "timKiem",
-          //     //   queryParameters: {"ten": "Mì"},
-          //     // );
-          //     context.go("/dacsan/vungmien/${vungMien.idVung}");
-          //   },
-          //   child: const Text("Xem thêm",
-          //       style: TextStyle(
-          //         fontSize: 12, fontWeight: FontWeight.bold, color: Colors.lightBlue)),
-          // ),
         ],
       ),
     );
@@ -395,13 +333,16 @@ class DacSanList extends StatelessWidget {
                         color: Color.fromARGB(155, 211, 211, 211),
                       ),
                     ),
-                    title: const Text(
-                      'Không tìm thấy Đặc sản liên quan (T_T)',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.red),
+                    title: const Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Không tìm thấy Đặc sản liên quan (T_T)',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.red),
+                      ),
                     ),
                   )
                 : ListView.builder(
