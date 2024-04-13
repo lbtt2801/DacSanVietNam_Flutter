@@ -4,12 +4,12 @@ import '../Model/dac_san.dart';
 import '../main.dart';
 
 class ThuVienProvider extends ChangeNotifier {
-  List<DacSan> ListYeuThich = dsYeuThich;
+  List<DacSan> listYeuThich = dsYeuThich;
 
-  List<DacSan> get dataList => ListYeuThich;
+  List<DacSan> get dataList => listYeuThich;
 
   void addDS(dsDS) {
-    ListYeuThich = dsDS;
+    listYeuThich = dsDS;
     notifyListeners(); // Thông báo cho các widget lắng nghe rằng dữ liệu đã thay đổi
   }
 }

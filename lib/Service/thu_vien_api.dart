@@ -1,5 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:vinaFoods/Model/comment.dart';
 import 'package:vinaFoods/Model/noi_ban.dart';
@@ -11,6 +16,9 @@ import '../Model/nguoi_dung.dart';
 import '../Model/tinh_thanh.dart';
 import '../Model/vung_mien.dart';
 import '../main.dart';
+
+const maxRetryCount = 3; // Số lần thử lại tối đa
+const retryDelay = Duration(seconds: 1); // Thời gian chờ giữa các lần thử lại
 
 Future<void> addUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {
@@ -24,7 +32,27 @@ Future<void> addUser(
 
   var url =
       Uri.parse('https://cntt199.000webhostapp.com/api/registerUser_OLD.php');
-  await post(url, body: data);
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await post(url, body: data);
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('---------------------- addUser ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error registering User: ${response.statusCode}');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to register User after $maxRetryCount attempts');
+  }
 }
 
 Future<void> deleteUser(String uid) async {
@@ -33,31 +61,82 @@ Future<void> deleteUser(String uid) async {
   };
 
   var url = Uri.parse('https://cntt199.000webhostapp.com/deleteUser.php');
-  await post(url, body: data);
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await post(url, body: data);
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('---------------------- deleteUser ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error deleting User: ${response.statusCode}');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to delete User after $maxRetryCount attempts');
+  }
 }
 
 Future<void> updateUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {
   Map<String, dynamic> data = {
-    'uid': uid,
-    'email': email,
-    'hoten': hoTen,
-    'gioitinh': isNam ? "Nam" : "Nữ",
-    'diachi': diaChi,
+    'IDUsers': uid,
+    'Email': email,
+    'Ten': hoTen,
+    'GioiTinh': isNam ? "Nam" : "Nữ",
+    'IDTinh': diaChi,
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/updateUser.php');
-  await post(url, body: data);
+  var url = Uri.parse('https://cntt199.000webhostapp.com/api/updateUser.php');
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await post(url, body: data);
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('---------------------- updateUser ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error updating User: ${response.statusCode}');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to update User after $maxRetryCount attempts');
+  }
 }
 
-Future<NguoiDung?> getDSUser() async {
-  var reponse = await get(
+Future<void> getDSUser() async {
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getUsers.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
 
-  for (var document in result) {
-    NguoiDung nguoiDung = NguoiDung.fromJson(document);
-    dsNguoiDung.add(nguoiDung);
+    for (var document in result) {
+      NguoiDung nguoiDung = NguoiDung.fromJson(document);
+      dsNguoiDung.add(nguoiDung);
+    }
+    if (kDebugMode) {
+      print('---------------------- getDSUser ----------------------');
+    }
+  } else {
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getDSUser);
   }
 }
 
@@ -75,75 +154,157 @@ Future<void> addFavorite(String idDacSan, String idUser) async {
     'IDDacSan': idDacSan,
     'IDUsers': idUser,
   };
-  print('API: addFavorite  --------------------------------------');
+
   var url = Uri.parse('https://cntt199.000webhostapp.com/api/addFavorite.php');
-  await post(url, body: data);
+
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await post(url, body: data);
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('---------------------- addFavorite ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error posting comment: ${response.statusCode}');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to post comment after $maxRetryCount attempts');
+  }
 }
 
 Future<void> getFavorite(String idUser) async {
-  var response = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser'));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await get(Uri.parse(
+        'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
 
-    List<String> lst = List<String>.from(data);
-    if (dsYeuThich.isNotEmpty) dsYeuThich.clear();
-    for (String id in lst) {
-      DacSan? dacSan = getDacSanTheoID(id);
-      dsYeuThich.add(dacSan);
+      List<String> lst = List<String>.from(data);
+      if (dsYeuThich.isNotEmpty) dsYeuThich.clear();
+      for (String id in lst) {
+        DacSan? dacSan = getDacSanTheoID(id);
+        dsYeuThich.add(dacSan);
+      }
+      if (kDebugMode) {
+        print('---------------------- getFavorite ----------------------');
+      }
+      return;
+    } else {
+      throw Exception('Failed to fetch data');
     }
-  } else {
-    throw Exception('Failed to fetch data');
+    retryCount++;
+    await Future.delayed(retryDelay);
   }
 
-  print('---------------------- getFavorite ----------------');
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to post comment after $maxRetryCount attempts');
+  }
 }
 
 Future<void> removeFavorite(String idUser, String idDacSan) async {
-  var response = await get(Uri.parse(
-      'https://cntt199.000webhostapp.com/api/removeFavorite.php?IDUsers=$idUser&IDDacSan=$idDacSan'));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-  } else {
-    throw Exception('Failed to remove Favorite');
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await get(Uri.parse(
+        'https://cntt199.000webhostapp.com/api/removeFavorite.php?IDUsers=$idUser&IDDacSan=$idDacSan'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (kDebugMode) {
+        print('---------------------- removeFavorite ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error removing Favorite: ${response.statusCode}');
+      }
+    }
+    retryCount++;
+    await Future.delayed(retryDelay);
   }
 
-  print('---------------------- removeFavorite ----------------');
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to post comment after $maxRetryCount attempts');
+  }
 }
 
 Future<void> getVung() async {
-  var reponse = await get(
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getVungAPI.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
 
-  for (var document in result) {
-    Vung vungMien = Vung.fromJson(document);
-    dsVungMien.add(vungMien);
+    for (var document in result) {
+      Vung vungMien = Vung.fromJson(document);
+      dsVungMien.add(vungMien);
+    }
+    if (kDebugMode) {
+      print('---------------------- getVung ----------------------');
+    }
+  } else {
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getVung);
   }
 }
 
 Future<void> getLoaiDacSan() async {
   dsLoaiDacSan.insert(0, LoaiDacSan(idLoaiDS: 'all', tenLoaiDS: 'Tất cả'));
-  var reponse = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getLoaiDacSan.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
 
-  for (var document in result) {
-    LoaiDacSan loaiDacSan = LoaiDacSan.fromJson(document);
-    dsLoaiDacSan.add(loaiDacSan);
+  var response = await get(
+      Uri.parse('https://cntt199.000webhostapp.com/api/getLoaiDacSan.php'));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
+
+    for (var document in result) {
+      LoaiDacSan loaiDacSan = LoaiDacSan.fromJson(document);
+      dsLoaiDacSan.add(loaiDacSan);
+    }
+    if (kDebugMode) {
+      print('---------------------- getLoaiDacSan ----------------------');
+    }
+  } else {
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getLoaiDacSan);
   }
 }
 
 Future<void> getDacSan() async {
-  var reponse = await get(
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getDacSanAPI.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
 
-  for (var document in result) {
-    DacSan dacSan = DacSan.fromJson(document);
-    if (dacSan.trangThai == "1") {
-      dsDacSan.add(dacSan);
+    for (var document in result) {
+      DacSan dacSan = DacSan.fromJson(document);
+      if (dacSan.trangThai == 1) {
+        dsDacSan.add(dacSan);
+      }
     }
+    if (kDebugMode) {
+      print('---------------------- getDacSan ----------------------');
+    }
+  } else {
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getDacSan);
   }
 }
 
@@ -158,9 +319,39 @@ Future<void> postComment(String soSao, String noiDung, String thoiGian,
   };
 
   var url = Uri.parse('https://cntt199.000webhostapp.com/api/postComment.php');
-  await post(url, body: data);
 
-  print('---------------------- postComment ----------------');
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    try {
+      var response = await post(url, body: data);
+      if (response.statusCode == 200) {
+        if (kDebugMode) {
+          print('---------------------- postComment ----------------------');
+        }
+        return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+      } else {
+        if (kDebugMode) {
+          print('Error posting comment: ${response.statusCode}');
+        }
+      }
+    } catch (error) {
+      if (error is SocketException) {
+        showCustomToast('Kết nối mạng có vấn đề. Vui lòng thử lại sau!');
+      } else if (error is ClientException) {
+        showCustomToast('ClientException. Vui lòng thử lại sau!');
+      } else {
+        showCustomToast('Lỗi không xác định. Vui lòng thử lại sau!');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to post comment after $maxRetryCount attempts');
+  }
 }
 
 Future<void> updateComment(String soSao, String noiDung, String thoiGian,
@@ -175,78 +366,71 @@ Future<void> updateComment(String soSao, String noiDung, String thoiGian,
 
   var url =
       Uri.parse('https://cntt199.000webhostapp.com/api/updateComment.php');
-  await post(url, body: data);
 
-  print('---------------------- updateComment ----------------');
+  int retryCount = 0;
+  while (retryCount < maxRetryCount) {
+    var response = await post(url, body: data);
+
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('---------------------- updateComment ----------------------');
+      }
+      return; // Kết thúc hàm sau khi gửi yêu cầu thành công
+    } else {
+      if (kDebugMode) {
+        print('Error updating comment: ${response.statusCode}');
+      }
+    }
+
+    retryCount++;
+    await Future.delayed(retryDelay);
+  }
+
+  // Thông báo khi đã thử lại đủ số lần nhưng không thành công
+  if (kDebugMode) {
+    print('Failed to update comment after $maxRetryCount attempts');
+  }
 }
 
 Future<void> getComment() async {
-  var reponse = await get(
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getCommentAPI.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
-
-  if (dsComment.isNotEmpty) dsComment.clear();
-  for (var document in result) {
-    Comment comment = Comment.fromJson(document);
-    // if(comment.trangThai == "1") {
-    dsComment.add(comment);
-    // }
-  }
-
-  print('---------------------- getComment ----------------');
-}
-
-getDSCommentFollowIDUser(String idUser) {
-  if (dsCommentIdUser.isNotEmpty) dsCommentIdUser.clear();
-  for (Comment cm in dsComment) {
-    if (cm.idUser == idUser) {
-      dsCommentIdUser.add(cm);
-    }
-  }
-}
-
-List<DacSan> getDanhSachDacSanTheoTen(String ten) {
-  List<DacSan> kq = [];
-  for (var dacSan in dsDacSan) {
-    if (dacSan.tenDS!.toLowerCase().contains(ten.toLowerCase())) {
-      kq.add(dacSan);
-    }
-  }
-
-  return kq;
-}
-
-List<Comment> getCommentsFollowIDDacSan(int idDacSan) {
-  List<Comment> kq = [];
-  fetchCommentsById(idDacSan).then((comments) {
-    dsComment = comments;
-    kq = comments;
-  }).catchError((error) {
-    print(error);
-  });
-  return kq;
-}
-
-Future<List<Comment>> fetchCommentsById(int idDacSan) async {
-  final response = await post(
-    Uri.parse('https://cntt199.000webhostapp.com/getComments.php'),
-    body: {'iddacsan': idDacSan.toString()},
-  );
   if (response.statusCode == 200) {
-    final List<dynamic> data = jsonDecode(response.body);
-    return data.map((json) => Comment.fromJson(json)).toList();
+    var result = json.decode(utf8.decode(response.bodyBytes));
+
+    if (dsComment.isNotEmpty) dsComment.clear();
+    for (var document in result) {
+      Comment comment = Comment.fromJson(document);
+      // if(comment.trangThai == "1") {
+      dsComment.add(comment);
+      // }
+    }
+    if (kDebugMode) {
+      print('---------------------- getComment ----------------------');
+    }
   } else {
-    throw Exception('Failed to fetch comments');
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getComment);
   }
 }
 
-String? getDacSanTheoTen(String ten) {
-  for (var dacSan in dsDacSan) {
-    if (dacSan.tenDS! == ten) {
-      return dacSan.idDacSan;
+void updateListCommentIdUser(List<Comment> listData, String soSao,
+    String noiDung, String thoiGian, String idDacSan, String idUser) {
+  for (int i = 0; i < listData.length; i++) {
+    if (listData[i].idUser == idUser) {
+      listData[i] = Comment(
+        soSao: soSao,
+        noiDung: noiDung,
+        thoiGian: thoiGian,
+        idDacSan: idDacSan,
+        idUser: idUser,
+      );
+      break;
     }
   }
-  return null;
 }
 
 DacSan getDacSanTheoID(String idDacSan) {
@@ -259,46 +443,71 @@ DacSan getDacSanTheoID(String idDacSan) {
 }
 
 Future<void> getHinhAnh() async {
-  var reponse = await get(
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getHinhAPI.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
 
-  for (var document in result) {
-    HinhAnh hinhAnh = HinhAnh.fromJson(document);
-    dsHinhAnh.add(hinhAnh);
+    for (var document in result) {
+      HinhAnh hinhAnh = HinhAnh.fromJson(document);
+      dsHinhAnh.add(hinhAnh);
+    }
+
+    if (kDebugMode) {
+      print('---------------------- getHinhAnh ----------------------');
+    }
+  } else {
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getHinhAnh);
   }
 }
 
 Future<void> getNoiBan() async {
-  var reponse = await get(
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getNoiBanAPI.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
 
-  for (var document in result) {
-    NoiBan noiBan = NoiBan.fromJson(document);
-    dsNoiBan.add(noiBan);
-  }
-}
+    for (var document in result) {
+      NoiBan noiBan = NoiBan.fromJson(document);
+      dsNoiBan.add(noiBan);
+    }
 
-String? getTenTinh(String? idTinh) {
-  Iterable<TinhThanh> tt =
-      dsTinhThanh.where((element) => element.idTinh == idTinh);
-
-  if (tt.isNotEmpty) {
-    return tt.first.tenTinh;
+    if (kDebugMode) {
+      print('---------------------- getNoiBan ----------------------');
+    }
   } else {
-    return "Không xác định";
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getNoiBan);
   }
 }
 
 Future<void> getTinhThanh() async {
-  var reponse = await get(
+  var response = await get(
       Uri.parse('https://cntt199.000webhostapp.com/api/getTinhAPI.php'));
-  var result = json.decode(utf8.decode(reponse.bodyBytes));
+  if (response.statusCode == 200) {
+    var result = json.decode(utf8.decode(response.bodyBytes));
 
-  for (var document in result) {
-    TinhThanh tinhThanh = TinhThanh.fromJson(document);
-    dsTinhThanh.add(tinhThanh);
+    for (var document in result) {
+      TinhThanh tinhThanh = TinhThanh.fromJson(document);
+      dsTinhThanh.add(tinhThanh);
+    }
+
+    if (kDebugMode) {
+      print('---------------------- getTinhThanh ----------------------');
+    }
+  } else {
+    if (kDebugMode) {
+      print('Error: ${response.statusCode}');
+      print('Error - CallBack');
+    }
+    Timer(const Duration(seconds: 1), getTinhThanh);
   }
 }
 
@@ -311,25 +520,11 @@ String getURLImage(String? idImage) {
   return url;
 }
 
-Future<String> getNameUser(String idUser) async {
-  final response = await post(
-    Uri.parse('https://cntt199.000webhostapp.com/getNameUser.php'),
-    body: {'iduser': idUser},
-  );
+List<String?> getTinhTuVung(String? idVung) {
+  List<TinhThanh> dsTinh =
+      dsTinhThanh.where((ds) => ds.idVung == idVung).toList();
 
-  if (response.statusCode == 200) {
-    final dynamic data = jsonDecode(response.body);
-    return data.toString();
-  } else {
-    throw Exception('Failed to fetch name user');
-  }
-}
-
-List<String?> getTinhTuVung(String? idOfVung) {
-  List<TinhThanh> DSTinh =
-      dsTinhThanh.where((ds) => ds.idVung == idOfVung).toList();
-
-  List<String?> tenTinhList = DSTinh.map((tinh) => tinh.idTinh).toList();
+  List<String?> tenTinhList = dsTinh.map((tinh) => tinh.idTinh).toList();
 
   return tenTinhList;
 }
@@ -339,24 +534,24 @@ List<DacSan> getIDTuTenTinh(String? tenTinh) {
     return dsDacSan;
   }
 
-  TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh);
+  TinhThanh? tinhThanh = dsTinhThanh.firstWhere((ds) => ds.tenTinh == tenTinh);
 
-  List<DacSan> DSFilterDS =
-      dsDacSan.where((ds) => ds.idTinh == IDTinh.idTinh).toList();
+  List<DacSan> dsFilter =
+      dsDacSan.where((ds) => ds.idTinh == tinhThanh.idTinh).toList();
 
-  return DSFilterDS;
+  return dsFilter;
 }
 
 // Lấy tên tỉnh từ ID
 String getTenTinhTuID(String? idTinh) {
-  TinhThanh? IDTinh = dsTinhThanh.firstWhere((ds) => ds.idTinh == idTinh);
-  return IDTinh.tenTinh.toString();
+  TinhThanh? tinhThanh = dsTinhThanh.firstWhere((ds) => ds.idTinh == idTinh);
+  return tinhThanh.tenTinh.toString();
 }
 
 // Lấy tên từ idUser
 String? getTenUser(String? idUser) {
-  NguoiDung User = dsNguoiDung.firstWhere((ds) => ds.uid == idUser);
-  return User.hoTen;
+  NguoiDung user = dsNguoiDung.firstWhere((ds) => ds.uid == idUser);
+  return user.hoTen;
 }
 
 // Lấy noi bán từ idDaSan
@@ -369,4 +564,15 @@ List<NoiBan> getNoiBanToDacSan(String idDS) {
 TinhThanh getTinhTuID(String id) {
   TinhThanh tt = dsTinhThanh.firstWhere((ds) => ds.idTinh == id);
   return tt;
+}
+// Toast
+void showCustomToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    backgroundColor: Colors.red,
+    textColor: Colors.white,
+    fontSize: 16.0,
+  );
 }

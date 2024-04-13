@@ -4,7 +4,7 @@ class DacSan {
   String? moTa;
   double? sao;
   String? avatar;
-  String? trangThai;
+  int? trangThai;
   String? idLoaiDS;
   String? idTinh;
 
@@ -24,7 +24,7 @@ class DacSan {
       idDacSan: json['IDDacSan'],
       tenDS: json['TenDS'],
       moTa: json['MoTa'],
-      sao: json['Sao'],
+      sao: double.parse(json['Sao'].toStringAsFixed(1)),
       avatar: json['Avatar'],
       trangThai: json['TrangThai'],
       idLoaiDS: json['IDLoaiDS'],

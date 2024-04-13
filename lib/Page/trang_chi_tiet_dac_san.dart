@@ -28,6 +28,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   late List<Comment> listComment;
   String textButton = 'Gửi đánh giá';
   double rating = 0;
+  double score = 0.0;
   TextEditingController reviewController = TextEditingController();
 
   @override
@@ -35,6 +36,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
     super.initState();
     dacSan = dsDacSan.where((ds) => ds.idDacSan == widget.maDS).first;
     listComment = dsComment.where((cm) => cm.idDacSan == widget.maDS).toList();
+    score = dacSan.sao ?? 0.0;
   }
 
   @override
@@ -110,7 +112,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  starNumber(dacSan.sao!),
+                  starNumber(score),
                   const SizedBox(width: 10),
                   Card(
                     margin: const EdgeInsets.only(bottom: 4),
@@ -119,7 +121,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       padding: const EdgeInsets.only(
                           left: 15, right: 15, top: 3, bottom: 1),
                       child: Text(
-                        dacSan.sao!.toString(),
+                        score.toString(),
                         style: const TextStyle(
                           fontSize: 22,
                           color: Colors.amber,
@@ -281,9 +283,9 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                           DateFormat('yyyy-MM-dd HH:mm:ss')
                                               .format(now);
 
-                                      if (dsCommentIdUser.isNotEmpty) {
-                                        isHasComment = dsCommentIdUser.any(
-                                          (ds) => ds.idDacSan == widget.maDS,
+                                      if (listComment.isNotEmpty) {
+                                        isHasComment = listComment.any(
+                                          (ds) => ds.idUser == nguoiDung.uid,
                                         );
                                       }
                                       if (isHasComment) {
@@ -304,21 +306,30 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                         );
                                       }
 
-                                      await getComment();
+                                      // await getComment();
 
                                       setState(() {
                                         listComment = dsComment
                                             .where((cm) =>
                                                 cm.idDacSan == widget.maDS)
                                             .toList();
-                                        dsCommentIdUser.insert(
-                                            0,
-                                            Comment(
-                                                soSao: rating.toString(),
-                                                noiDung: reviewController.text,
-                                                thoiGian: formattedDateTime,
-                                                idDacSan: widget.maDS,
-                                                idUser: nguoiDung.uid));
+                                        isHasComment
+                                            ? updateListCommentIdUser(
+                                            listComment,
+                                                rating.toString(),
+                                                reviewController.text,
+                                                formattedDateTime,
+                                                widget.maDS,
+                                                nguoiDung.uid)
+                                            : listComment.insert(
+                                                0,
+                                                Comment(
+                                                    soSao: rating.toString(),
+                                                    noiDung:
+                                                        reviewController.text,
+                                                    thoiGian: formattedDateTime,
+                                                    idDacSan: widget.maDS,
+                                                    idUser: nguoiDung.uid));
                                       });
                                     } else {
                                       showDialog<String>(

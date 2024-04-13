@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vinaFoods/main.dart';
 
-import '../Model/dac_san.dart';
-import '../Service/thu_vien_api.dart';
 import '../Model/Provider.dart';
-import 'package:provider/provider.dart';
-
+import '../Service/thu_vien_api.dart';
 
 class ButtonSave extends StatefulWidget {
   final String idDacSan;
@@ -28,7 +26,7 @@ class _ButtonSaveState extends State<ButtonSave> {
   @override
   Widget build(BuildContext context) {
     final provder = Provider.of<ThuVienProvider>(context);
-    isCheck = provder.ListYeuThich.any((ds) => ds.idDacSan == widget.idDacSan);
+    isCheck = provder.listYeuThich.any((ds) => ds.idDacSan == widget.idDacSan);
     return IconButton(
       iconSize: 37,
       color: Colors.red,
@@ -44,12 +42,23 @@ class _ButtonSaveState extends State<ButtonSave> {
             await removeFavorite(widget.idUser, widget.idDacSan);
           }
           await getFavorite(widget.idUser);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(!isCheck ? "Thêm Đặc sản Yêu thích thành công": "Đã xóa Đặc sản khỏi Danh sách Yêu thích"),
+            ),
+          );
         } else {
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
-              title: const Text('Thông báo', style: TextStyle(fontSize: 20),),
-              content: const Text('Bạn phải đăng nhập để thực hiện tính năng này!', style: TextStyle(fontSize: 16, color: Colors.orange),),
+              title: const Text(
+                'Thông báo',
+                style: TextStyle(fontSize: 20),
+              ),
+              content: const Text(
+                'Bạn phải đăng nhập để thực hiện tính năng này!',
+                style: TextStyle(fontSize: 16, color: Colors.orange),
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context, 'OK'),

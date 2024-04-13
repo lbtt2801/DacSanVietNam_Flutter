@@ -31,7 +31,7 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ThuVienProvider>(context);
-    List<DacSan> dacSans = provider.ListYeuThich;
+    List<DacSan> dacSans = provider.listYeuThich;
     return Scaffold(
       body: Column(
         children: [

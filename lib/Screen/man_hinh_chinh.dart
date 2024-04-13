@@ -1,5 +1,6 @@
 import 'package:async_builder/async_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:go_router/go_router.dart';
@@ -42,7 +43,7 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
         await getFavorite(FirebaseAuth.instance.currentUser!.uid);
         await getNoiBan();
         nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;
-        getDSCommentFollowIDUser(nguoiDung.uid);
+        // getDSCommentFollowIDUser(nguoiDung.uid);
         return "";
       },
     );
@@ -55,10 +56,12 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       future: myFuture,
       waiting: (context) => LoadingScreen(),
       builder: (context, value) => PopScope(
-        onPopInvoked: (popped) {
+        onPopInvoked: (didPop) {
+          if (kDebugMode) {
+            print(value);
+          }
           ThongBaoXacNhanThoat(context);
         },
-        canPop: false,
         child: Scaffold(
           appBar: buildAppBar(),
           body: widget.page,
@@ -201,6 +204,17 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.white60,
       onTap: (value) {
+        switch (value) {
+          case 0: {
+            getComment();
+            selectedIndex != 0 ? context.go('/') : context.pop();
+            break;
+          }
+          case 1: {
+            selectedIndex != 1 ? context.go('/') : context.pop();
+          }
+        }
+
         setState(() {
           widget.page.goBranch(value);
           selectedIndex = value;

@@ -32,7 +32,6 @@ List<LoaiDacSan> dsLoaiDacSan = [];
 List<NoiBat> dsDacSanNoiBat = [];
 List<DacSan> dsYeuThich = [];
 List<Comment> dsComment = [];
-List<Comment> dsCommentIdUser = [];
 String idGuest = 'VnnNKzwRoqOItzRC4PPg4mkaRcc2';
 late NguoiDung nguoiDung;
 

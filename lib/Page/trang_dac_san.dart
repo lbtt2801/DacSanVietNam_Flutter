@@ -329,7 +329,6 @@ class TinhList extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                   onTap: () => {
-                    getCommentsFollowIDDacSan(1),
                     context
                         .go("/dacsan/tinhThanh/${lstTinhThanh[index].idTinh!}")
                   },
