@@ -25,7 +25,7 @@ class _showNoiBan extends State<ShowNoiBanList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 120,
+        height: 130,
         width: 350,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -51,10 +51,10 @@ class _showNoiBan extends State<ShowNoiBanList> {
                         },
                         child: Hero(
                           tag: 'hinhDS$index',
-                          child: Image.network(noiban.linkAnh,
+                          child: Image.network(noiban.linkAnh ?? "http://www.clker.com/cliparts/2/l/m/p/B/b/error-md.png",
                               fit: BoxFit.cover,
-                              width: 150, // Đặt chiều rộng mong muốn
-                              height: 100),
+                              width: 180, // Đặt chiều rộng mong muốn
+                              height: 130),
                         ),
                       ),
                     ),

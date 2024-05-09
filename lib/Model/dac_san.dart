@@ -24,9 +24,11 @@ class DacSan {
       idDacSan: json['IDDacSan'],
       tenDS: json['TenDS'],
       moTa: json['MoTa'],
-      sao: double.parse(json['Sao'].toStringAsFixed(1)),
+      // sao: double.parse(json['Sao'].toStringAsFixed(1)),
+      sao: double.parse(json['Sao']),
       avatar: json['Avatar'],
-      trangThai: json['TrangThai'],
+      // trangThai: json['TrangThai'],
+      trangThai: int.parse(json['TrangThai']),
       idLoaiDS: json['IDLoaiDS'],
       idTinh: json['IDTinh'],
     );

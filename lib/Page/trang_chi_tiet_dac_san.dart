@@ -226,14 +226,10 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                       fontSize: 28,
                       fontFamily: "RobotoBlack")),
             ),
-            Card(
-                // color: const Color.fromARGB(255, 242, 242, 242),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8.0),
-                    child: ShowNoiBanList(idDacSan: dacSan.idDacSan!))),
+            Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8.0),
+                child: ShowNoiBanList(idDacSan: dacSan.idDacSan!)),
             const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(
