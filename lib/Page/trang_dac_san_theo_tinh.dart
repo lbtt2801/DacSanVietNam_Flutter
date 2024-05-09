@@ -37,6 +37,7 @@ class _TrangDacSanTheoTinhState extends State<TrangDacSanTheoTinh> {
         dsDacSan.where((dacSan) => dacSan.idTinh == widget.maTinh).toList();
     filteredDacSan = lstDacSan;
     tinhThanh = getTinhTuID(widget.maTinh);
+    print('truong tinhThanh -- ${tinhThanh.idTinh} - ${tinhThanh.linkAnh}');
   }
 
   @override

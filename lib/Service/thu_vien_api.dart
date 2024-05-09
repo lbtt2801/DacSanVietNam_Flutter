@@ -17,8 +17,10 @@ import '../Model/tinh_thanh.dart';
 import '../Model/vung_mien.dart';
 import '../main.dart';
 
+
 const maxRetryCount = 3; // Số lần thử lại tối đa
 const retryDelay = Duration(seconds: 1); // Thời gian chờ giữa các lần thử lại
+const domain = "http://192.168.88.37/dacsan/api/"; // https://cntt199.000webhostapp.com/api/
 
 Future<void> addUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {
@@ -31,7 +33,7 @@ Future<void> addUser(
   };
 
   var url =
-      Uri.parse('https://cntt199.000webhostapp.com/api/registerUser_OLD.php');
+      Uri.parse('${domain}registerUser_OLD.php');
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
     var response = await post(url, body: data);
@@ -60,7 +62,7 @@ Future<void> deleteUser(String uid) async {
     'uid': uid,
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/deleteUser.php');
+  var url = Uri.parse('${domain}deleteUser.php');
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
     var response = await post(url, body: data);
@@ -94,7 +96,7 @@ Future<void> updateUser(
     'IDTinh': diaChi,
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/api/updateUser.php');
+  var url = Uri.parse('${domain}updateUser.php');
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
     var response = await post(url, body: data);
@@ -120,7 +122,7 @@ Future<void> updateUser(
 
 Future<void> getDSUser() async {
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getUsers.php'));
+      Uri.parse('${domain}getUsers.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -155,7 +157,7 @@ Future<void> addFavorite(String idDacSan, String idUser) async {
     'IDUsers': idUser,
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/api/addFavorite.php');
+  var url = Uri.parse('${domain}addFavorite.php');
 
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
@@ -184,7 +186,7 @@ Future<void> getFavorite(String idUser) async {
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
     var response = await get(Uri.parse(
-        'https://cntt199.000webhostapp.com/api/getFavorite.php?IDUsers=$idUser'));
+        '${domain}getFavorite.php?IDUsers=$idUser'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
@@ -217,7 +219,7 @@ Future<void> removeFavorite(String idUser, String idDacSan) async {
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
     var response = await get(Uri.parse(
-        'https://cntt199.000webhostapp.com/api/removeFavorite.php?IDUsers=$idUser&IDDacSan=$idDacSan'));
+        '${domain}removeFavorite.php?IDUsers=$idUser&IDDacSan=$idDacSan'));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -242,7 +244,7 @@ Future<void> removeFavorite(String idUser, String idDacSan) async {
 
 Future<void> getVung() async {
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getVungAPI.php'));
+      Uri.parse('${domain}getVungAPI.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -266,7 +268,7 @@ Future<void> getLoaiDacSan() async {
   dsLoaiDacSan.insert(0, LoaiDacSan(idLoaiDS: 'all', tenLoaiDS: 'Tất cả'));
 
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getLoaiDacSan.php'));
+      Uri.parse('${domain}getLoaiDacSan.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -288,7 +290,7 @@ Future<void> getLoaiDacSan() async {
 
 Future<void> getDacSan() async {
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getDacSanAPI.php'));
+      Uri.parse('${domain}getDacSanAPI.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -317,7 +319,7 @@ Future<void> updatePropsSao(String idDacSan, String soSao) async {
   };
 
   var url =
-      Uri.parse('https://cntt199.000webhostapp.com/api/updatePropsSao.php');
+      Uri.parse('${domain}updatePropsSao.php');
 
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
@@ -354,7 +356,7 @@ Future<void> postComment(String soSao, String noiDung, String thoiGian,
     'IDUsers': idUser,
   };
 
-  var url = Uri.parse('https://cntt199.000webhostapp.com/api/postComment.php');
+  var url = Uri.parse('${domain}postComment.php');
 
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
@@ -401,7 +403,7 @@ Future<void> updateComment(String soSao, String noiDung, String thoiGian,
   };
 
   var url =
-      Uri.parse('https://cntt199.000webhostapp.com/api/updateComment.php');
+      Uri.parse('${domain}updateComment.php');
 
   int retryCount = 0;
   while (retryCount < maxRetryCount) {
@@ -430,7 +432,7 @@ Future<void> updateComment(String soSao, String noiDung, String thoiGian,
 
 Future<void> getComment() async {
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getCommentAPI.php'));
+      Uri.parse('${domain}getCommentAPI.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -491,7 +493,7 @@ DacSan getDacSanTheoID(String idDacSan) {
 
 Future<void> getHinhAnh() async {
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getHinhAPI.php'));
+      Uri.parse('${domain}getHinhAPI.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -514,7 +516,7 @@ Future<void> getHinhAnh() async {
 
 Future<void> getNoiBan() async {
   var response = await get(
-      Uri.parse('https://cntt199.000webhostapp.com/api/getNoiBanAPI.php'));
+      Uri.parse('${domain}getNoiBanAPI.php'));
   if (response.statusCode == 200) {
     var result = json.decode(utf8.decode(response.bodyBytes));
 
@@ -538,7 +540,7 @@ Future<void> getNoiBan() async {
 Future<void> getTinhThanh() async {
   try {
     var response = await get(
-        Uri.parse('https://cntt199.000webhostapp.com/api/getTinhAPI.php'));
+        Uri.parse('${domain}getTinhAPI.php'));
     if (response.statusCode == 200) {
       var result = json.decode(utf8.decode(response.bodyBytes));
 
