@@ -25,7 +25,7 @@ class _showNoiBan extends State<ShowNoiBanList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 120,
+        height: 130,
         width: 350,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -54,14 +54,14 @@ class _showNoiBan extends State<ShowNoiBanList> {
                           child: Image.network(
                             noiban.linkAnh,
                             fit: BoxFit.cover,
-                            width: 150,
-                            height: 100,
+                            width: 180,
+                            height: 130,
                             errorBuilder: (context, error, stackTrace) {
                               return Image.network(
                                 "https://firebasestorage.googleapis.com/v0/b/dacsanvietnam-6ee19.appspot.com/o/khong-hien-thi.png?alt=media&token=1f60e24e-735b-4e3b-bb86-f28db5c639f6",
                                 fit: BoxFit.cover,
-                                width: 150,
-                                height: 100,
+                                width: 180,
+                                height: 130,
                               );
                             },
                           ),
