@@ -18,6 +18,8 @@ import '../Service/thu_vien_widget.dart';
 import '../Widget/thong_bao_xac_nhan_thoat.dart';
 import '../main.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class TrangDacSan extends StatefulWidget {
   const TrangDacSan({super.key});
 
@@ -161,10 +163,11 @@ class _TrangDacSanState extends State<TrangDacSan> {
                 queryParameters: {"noiBat": "true"},
               );
             },
-            child: const Column(
+            child: Column(
               children: [
-                Text("------- Đặc sản quanh bạn -------",
-                    style: TextStyle(
+                Text(
+                    "------- ${AppLocalizations.of(context)!.around} -------",
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.lightBlue,
                         fontSize: 20)),
@@ -333,12 +336,12 @@ class DacSanList extends StatelessWidget {
                         color: Color.fromARGB(155, 211, 211, 211),
                       ),
                     ),
-                    title: const Align(
+                    title: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        'Không tìm thấy Đặc sản liên quan (T_T)',
+                        AppLocalizations.of(context)!.no_specialties,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Colors.red),

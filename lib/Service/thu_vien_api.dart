@@ -17,10 +17,8 @@ import '../Model/tinh_thanh.dart';
 import '../Model/vung_mien.dart';
 import '../main.dart';
 
-
 const maxRetryCount = 3; // Số lần thử lại tối đa
 const retryDelay = Duration(seconds: 1); // Thời gian chờ giữa các lần thử lại
-const domain = "http://192.168.88.37/dacsan/api/"; // https://cntt199.000webhostapp.com/api/
 
 Future<void> addUser(
     String uid, String email, String hoTen, bool isNam, String diaChi) async {

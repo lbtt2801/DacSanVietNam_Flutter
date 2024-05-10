@@ -18,6 +18,7 @@ import '../Screen/man_hinh_dang_ky.dart';
 import '../Service/thu_vien_style.dart';
 import '../Service/thu_vien_widget.dart';
 import '../Widget/VerticalGapSizedBox.dart';
+import '../main.dart';
 
 class ManHinhDangNhap extends StatefulWidget {
   ManHinhDangNhap({
@@ -235,7 +236,7 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
       suffixIcon: IconButton(
         icon: Icon(
           // Based on passwordVisible state choose the icon
-          hidePassword ? Icons.visibility : Icons.visibility_off,
+          hidePassword ? Icons.visibility_off : Icons.visibility,
         ),
         onPressed: () {
           setState(() {
@@ -321,8 +322,7 @@ class _ManHinhDangNhapState extends State<ManHinhDangNhap> {
   Future<void> DangKyThemThongTin(User user) async {
     List<NguoiDung> dsNguoiDung = [];
 
-    var response = await get(Uri.parse(
-        'https://truyentranhandriod.000webhostapp.com/api/getUsers.php'));
+    var response = await get(Uri.parse('${domain}getUsers.php'));
     var result = json.decode(utf8.decode(response.bodyBytes));
 
     if (context.mounted) {

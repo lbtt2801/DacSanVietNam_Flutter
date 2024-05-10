@@ -51,10 +51,20 @@ class _showNoiBan extends State<ShowNoiBanList> {
                         },
                         child: Hero(
                           tag: 'hinhDS$index',
-                          child: Image.network(noiban.linkAnh,
-                              fit: BoxFit.cover,
-                              width: 150, // Đặt chiều rộng mong muốn
-                              height: 100),
+                          child: Image.network(
+                            noiban.linkAnh,
+                            fit: BoxFit.cover,
+                            width: 150,
+                            height: 100,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.network(
+                                "https://firebasestorage.googleapis.com/v0/b/dacsanvietnam-6ee19.appspot.com/o/khong-hien-thi.png?alt=media&token=1f60e24e-735b-4e3b-bb86-f28db5c639f6",
+                                fit: BoxFit.cover,
+                                width: 150,
+                                height: 100,
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -67,8 +77,9 @@ class _showNoiBan extends State<ShowNoiBanList> {
                         children: [
                           Text(
                             noiban.tenQuan,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            maxLines: 2, // Giới hạn hiển thị tối đa 2 dòng
+                            overflow: TextOverflow.ellipsis, // Xử lý văn bản dài bằng dấu ba chấm "..."
                           ),
                           Text(
                             noiban.diaChi,

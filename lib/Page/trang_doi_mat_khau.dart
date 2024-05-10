@@ -23,7 +23,7 @@ class TrangDoiMatKhau extends StatefulWidget {
 }
 
 class _TrangDoiMatKhauState extends State<TrangDoiMatKhau> {
-  bool hidePassword = false;
+  bool hidePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class _TrangDoiMatKhauState extends State<TrangDoiMatKhau> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       // Based on passwordVisible state choose the icon
-                      hidePassword ? Icons.visibility : Icons.visibility_off,
+                      hidePassword ? Icons.visibility_off : Icons.visibility,
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
@@ -105,7 +105,7 @@ class _TrangDoiMatKhauState extends State<TrangDoiMatKhau> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       // Based on passwordVisible state choose the icon
-                      hidePassword ? Icons.visibility : Icons.visibility_off,
+                      hidePassword ? Icons.visibility_off : Icons.visibility,
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
@@ -143,7 +143,7 @@ class _TrangDoiMatKhauState extends State<TrangDoiMatKhau> {
                   suffixIcon: IconButton(
                     icon: Icon(
                       // Based on passwordVisible state choose the icon
-                      hidePassword ? Icons.visibility : Icons.visibility_off,
+                      hidePassword ? Icons.visibility_off : Icons.visibility,
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
@@ -212,6 +212,11 @@ class _TrangDoiMatKhauState extends State<TrangDoiMatKhau> {
 
   void doiMatKhau(User user, BuildContext context) {
     user.updatePassword(widget.matKhauMoiController.text).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Đổi mật khẩu thành công"),
+        ),
+      );
       context.go("/nguoidung");
     }).catchError((error) {
       var snackBar = SnackBar(

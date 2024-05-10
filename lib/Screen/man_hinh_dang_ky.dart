@@ -50,7 +50,7 @@ class _ManHinhDangKyState extends State<ManHinhDangKy> {
       widget.emailController.text = widget.email!;
       isEmailReadOnly = true;
     }
-
+    if (dsTinhThanh.isEmpty) getTinhThanh();
     super.initState();
   }
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:translator/translator.dart';
 import 'package:vinaFoods/Model/dac_san.dart';
 import 'package:vinaFoods/Service/thu_vien_api.dart';
-import 'package:provider/provider.dart';
 
 import '../Model/Provider.dart';
 import '../Model/comment.dart';
@@ -32,6 +34,22 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
   double rating = 0;
   double score = 0.0;
   TextEditingController reviewController = TextEditingController();
+  final translator = GoogleTranslator();
+
+  String inputLanguage = 'vi';
+  String outputLanguage = MainApp.getLocale();
+  String output = "";
+
+  Future<void> translateText(String input) async {
+    final translated = await translator.translate(
+      input,
+      from: inputLanguage,
+      to: outputLanguage,
+    );
+    setState(() {
+      output = translated.text;
+    });
+  }
 
   @override
   void initState() {
@@ -152,7 +170,7 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: getHinhAnhDS(dacSan.idDacSan ??
-                          'https://babettesonline.com/images/thumbs/default-image_1200.png')
+                          'https://firebasestorage.googleapis.com/v0/b/dacsanvietnam-6ee19.appspot.com/o/khong-hien-thi.png?alt=media&token=1f60e24e-735b-4e3b-bb86-f28db5c639f6')
                       .length,
                   // itemCount: 10,
                   itemBuilder: (context, index) {
@@ -174,11 +192,21 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           child: Hero(
                             tag: 'hinhDS$index',
                             child: Image.network(
-                                getHinhAnhDS(dacSan.idDacSan ?? '0')[index],
-                                fit: BoxFit.cover,
-                                width:
-                                    double.infinity, // Đặt chiều rộng mong muốn
-                                height: double.infinity),
+                              getHinhAnhDS(dacSan.idDacSan ?? '0')[index],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              // Đặt chiều rộng mong muốn
+                              height: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/dacsanvietnam-6ee19.appspot.com/o/khong-hien-thi.png?alt=media&token=1f60e24e-735b-4e3b-bb86-f28db5c639f6",
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  // Đặt chiều rộng mong muốn
+                                  height: double.infinity,
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -186,12 +214,12 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                   }),
             ),
             const SizedBox(height: 25),
-            const Padding(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 left: 15,
               ),
-              child: Text('Nội dung',
-                  style: TextStyle(
+              child: Text(AppLocalizations.of(context)!.content,
+                  style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.teal,
                       fontSize: 28,
@@ -215,32 +243,28 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                           fontWeight: FontWeight.w900)),
                 )),
             const SizedBox(height: 15),
-            const Padding(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 left: 15,
               ),
-              child: Text('Nơi bán đề xuất',
-                  style: TextStyle(
+              child: Text(AppLocalizations.of(context)!.noi_ban,
+                  style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.teal,
                       fontSize: 28,
                       fontFamily: "RobotoBlack")),
             ),
-            Card(
-                // color: const Color.fromARGB(255, 242, 242, 242),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8.0),
-                    child: ShowNoiBanList(idDacSan: dacSan.idDacSan!))),
+            Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8.0),
+                child: ShowNoiBanList(idDacSan: dacSan.idDacSan!)),
             const SizedBox(height: 15),
-            const Padding(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 left: 15,
               ),
-              child: Text('Đánh giá',
-                  style: TextStyle(
+              child: Text(AppLocalizations.of(context)!.danh_gia,
+                  style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.teal,
                       fontSize: 28,
@@ -348,13 +372,16 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                         context: context,
                                         builder: (BuildContext context) =>
                                             AlertDialog(
-                                          title: const Text(
-                                            'Thông báo',
-                                            style: TextStyle(fontSize: 20),
+                                          title: Text(
+                                            AppLocalizations.of(context)!
+                                                .thong_bao,
+                                            style:
+                                                const TextStyle(fontSize: 20),
                                           ),
-                                          content: const Text(
-                                            'Bạn phải đăng nhập để thực hiện tính năng này!',
-                                            style: TextStyle(
+                                          content: Text(
+                                            AppLocalizations.of(context)!
+                                                .noidung_thongbao,
+                                            style: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.orange),
                                           ),
@@ -380,7 +407,8 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                         maxLength: 200,
                         maxLines: 2,
                         decoration: InputDecoration(
-                          hintText: 'Nhập nội dung đánh giá',
+                          hintText:
+                              AppLocalizations.of(context)!.noi_dung_danh_gia,
                           suffixIcon: reviewController.text.isNotEmpty
                               ? IconButton(
                                   icon: const Icon(Icons.clear),
@@ -397,12 +425,12 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                   ),
                 )),
             const SizedBox(height: 25),
-            const Padding(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 left: 15,
               ),
-              child: Text('Nhận xét',
-                  style: TextStyle(
+              child: Text(AppLocalizations.of(context)!.nhan_xet,
+                  style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.teal,
                       fontSize: 28,
@@ -425,10 +453,10 @@ class _TrangChiTietDacSanState extends State<TrangChiTietDacSan> {
                                 color: Color.fromARGB(155, 211, 211, 211),
                               ),
                             ),
-                            title: const Text(
-                              'Hiện chưa có nhận xét nào. Đánh giá ngay!',
+                            title: Text(
+                              AppLocalizations.of(context)!.noidung_nhanxet,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),

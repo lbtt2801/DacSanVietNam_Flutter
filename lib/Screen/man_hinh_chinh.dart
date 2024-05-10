@@ -2,6 +2,7 @@ import 'package:async_builder/async_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,12 +43,21 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
         await getDSUser();
         await getFavorite(FirebaseAuth.instance.currentUser!.uid);
         await getNoiBan();
-        nguoiDung = (await getUser(FirebaseAuth.instance.currentUser!.uid))!;
+        nguoiDung = ((await getUser(FirebaseAuth.instance.currentUser!.uid)) ??
+            (await getUser(
+                "VnnNKzwRoqOItzRC4PPg4mkaRcc2")))!; // id nguời dùng khách
         // getDSCommentFollowIDUser(nguoiDung.uid);
         return "";
       },
     );
     super.initState();
+  }
+
+  void _selectLanguage(String language) {
+    setState(() {
+      selectedLanguage = language;
+      MainApp.setLocale(context, Locale(language, ''));
+    });
   }
 
   @override
@@ -102,6 +112,37 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
                     right: 20,
                   ),
                   child: buildSearchAnchor(),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showMenu(
+                    context: context,
+                    position: const RelativeRect.fromLTRB(75, 75, 0, 0),
+                    items: [
+                      PopupMenuItem<String>(
+                        value: 'vi',
+                        child: Text(
+                            '\u{1F1FB}\u{1F1F3}  ${AppLocalizations.of(context)!.vi}'),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'en',
+                        child: Text(
+                            '\u{1F1EC}\u{1F1E7}  ${AppLocalizations.of(context)!.en}'),
+                      ),
+                    ],
+                  ).then((value) {
+                    if (value != null) {
+                      _selectLanguage(value);
+                    }
+                  });
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Icon(
+                    Icons.language,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
@@ -186,18 +227,18 @@ class _ManHinhChinhState extends State<ManHinhChinh> {
   BottomNavigationBar buildBottomNavigationBar() {
     return BottomNavigationBar(
       backgroundColor: const Color.fromARGB(255, 30, 144, 255),
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Đặc sản',
+          icon: const Icon(Icons.home),
+          label: AppLocalizations.of(context)!.home,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite),
-          label: 'Yêu thích',
+          icon: const Icon(Icons.favorite),
+          label: AppLocalizations.of(context)!.favourite,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_box),
-          label: 'Người dùng',
+          icon: const Icon(Icons.account_box),
+          label: AppLocalizations.of(context)!.user,
         ),
       ],
       currentIndex: selectedIndex,

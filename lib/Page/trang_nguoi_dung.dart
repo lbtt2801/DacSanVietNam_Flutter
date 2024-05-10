@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -31,8 +32,6 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
   String updateText = "Cập nhật thông tin";
   bool isNam = true;
   int indexTinh = 0;
-  String textLogout =
-      nguoiDung.uid == idGuest ? 'Đăng nhập/ Đăng ký' : "Đăng xuất";
 
   @override
   void initState() {
@@ -48,6 +47,9 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
 
   @override
   Widget build(BuildContext context) {
+    String textLogout = nguoiDung.uid == idGuest
+        ? AppLocalizations.of(context)!.in_up
+        : AppLocalizations.of(context)!.out;
     return PopScope(
       onPopInvoked: (popped) {
         ThongBaoXacNhanThoat(context);
@@ -65,10 +67,10 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                       color: Color.fromARGB(155, 211, 211, 211),
                     ),
                   ),
-                  title: const Text(
-                    "Thông tin người dùng",
+                  title: Text(
+                    AppLocalizations.of(context)!.infor,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -76,7 +78,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                 ),
                 TextFieldNguoiDung(
                   controller: widget.uidController,
-                  text: "Id người dùng",
+                  text: AppLocalizations.of(context)!.id,
                   isReadOnly: true,
                 ),
                 TextFieldNguoiDung(
@@ -86,7 +88,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                 ),
                 TextFieldNguoiDung(
                   controller: widget.hoTenController,
-                  text: "Họ tên",
+                  text: AppLocalizations.of(context)!.name,
                   isReadOnly: isReadOnly,
                 ),
                 ListTile(
@@ -99,13 +101,13 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: DropdownSearch<TinhThanh>(
                       enabled: !isReadOnly,
-                      popupProps: const PopupProps.menu(
+                      popupProps: PopupProps.menu(
                         title: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Center(
                             child: Text(
-                              "Danh sách tỉnh thành",
-                              style: TextStyle(fontSize: 16),
+                              AppLocalizations.of(context)!.ds_tinh,
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                         ),
@@ -150,7 +152,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                     children: [
                       Flexible(
                         child: ListTile(
-                          title: const Text("Nam"),
+                          title: Text(AppLocalizations.of(context)!.gt_nam),
                           leading: Radio(
                             value: true,
                             groupValue: isNam,
@@ -166,7 +168,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                       ),
                       Flexible(
                         child: ListTile(
-                          title: const Text("Nữ"),
+                          title: Text(AppLocalizations.of(context)!.gt_nu),
                           leading: Radio(
                             value: false,
                             groupValue: isNam,
@@ -206,7 +208,8 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                         setState(() {
                           if (isReadOnly) {
                             isReadOnly = false;
-                            updateText = "Lưu thông tin";
+                            updateText =
+                                AppLocalizations.of(context)!.save_infor;
                           } else {
                             isReadOnly = true;
                             updateUser(
@@ -216,7 +219,8 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                               isNam,
                               widget.diaChiController.text,
                             );
-                            updateText = "Cập nhật thông tin";
+                            updateText =
+                                AppLocalizations.of(context)!.update_infor;
                           }
                         });
                       },
@@ -248,7 +252,7 @@ class _TrangNguoiDungState extends State<TrangNguoiDung> {
                               context.go(
                                   "/doimatkhau/${FirebaseAuth.instance.currentUser!.uid}");
                             },
-                      child: const Text("Cập nhật mât khẩu"),
+                      child: Text(AppLocalizations.of(context)!.update_pass),
                     ),
                   ),
                 ),

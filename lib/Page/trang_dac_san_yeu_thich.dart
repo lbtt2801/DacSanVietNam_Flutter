@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,6 @@ class TrangDacSanYeuThich extends StatefulWidget {
 
 class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
   List<DacSan> dacSans = [];
-  String textList = nguoiDung.uid == idGuest
-      ? "Đăng nhập để thực hiện tính năng này!"
-      : "Chưa có Đặc sản Yêu thích !";
 
   @override
   void initState() {
@@ -30,6 +28,10 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
 
   @override
   Widget build(BuildContext context) {
+    String textList = nguoiDung.uid == idGuest
+        ? AppLocalizations.of(context)!.noidung_thongbao
+        : AppLocalizations.of(context)!.kh_yeuthich;
+
     final provider = Provider.of<ThuVienProvider>(context);
     List<DacSan> dacSans = provider.listFavorite;
     return Scaffold(
@@ -41,10 +43,10 @@ class _TrangDacSanYeuThichState extends State<TrangDacSanYeuThich> {
                 color: Color.fromARGB(155, 211, 211, 211),
               ),
             ),
-            title: const Text(
-              "Danh sách Đặc sản Yêu thích",
+            title: Text(
+              AppLocalizations.of(context)!.ds_yeuthich,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),

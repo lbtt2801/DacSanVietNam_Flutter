@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:vinaFoods/main.dart';
 
 import '../Model/Provider.dart';
 import '../Service/thu_vien_api.dart';
-
 class ButtonSave extends StatefulWidget {
   final String idDacSan;
   final String idUser;
@@ -44,20 +44,20 @@ class _ButtonSaveState extends State<ButtonSave> {
           await getFavorite(widget.idUser);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(!isCheck ? "Thêm Đặc sản Yêu thích thành công": "Đã xóa Đặc sản khỏi Danh sách Yêu thích"),
+              content: Text(!isCheck ? AppLocalizations.of(context)!.them_yeuthich_thanhcong : AppLocalizations.of(context)!.xoa_yeuthich),
             ),
           );
         } else {
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
-              title: const Text(
-                'Thông báo',
-                style: TextStyle(fontSize: 20),
+              title: Text(
+                AppLocalizations.of(context)!.thong_bao,
+                style: const TextStyle(fontSize: 20),
               ),
-              content: const Text(
-                'Bạn phải đăng nhập để thực hiện tính năng này!',
-                style: TextStyle(fontSize: 16, color: Colors.orange),
+              content:  Text(
+                AppLocalizations.of(context)!.noidung_thongbao,
+                style: const TextStyle(fontSize: 16, color: Colors.orange),
               ),
               actions: <Widget>[
                 TextButton(

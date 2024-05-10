@@ -17,6 +17,7 @@ import 'Model/noi_bat.dart';
 import 'Model/tinh_thanh.dart';
 import 'Model/vung_mien.dart';
 import 'Router/router_config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 late final SharedPreferences ref;
 List<Vung> dsVungMien = [];
@@ -33,7 +34,9 @@ List<NoiBat> dsDacSanNoiBat = [];
 List<DacSan> dsYeuThich = [];
 List<DacSan> dsGanBan = [];
 List<Comment> dsComment = [];
+String selectedLanguage = 'vi'; // Ngôn ngữ được chọn mặc định
 String idGuest = 'VnnNKzwRoqOItzRC4PPg4mkaRcc2';
+const domain = "http://192.168.88.41/dacsan/api/"; // https://cntt199.000webhostapp.com/api/
 late NguoiDung nguoiDung;
 
 Future<void> main() async {
@@ -67,9 +70,29 @@ class MainApp extends StatefulWidget {
 
   @override
   State<MainApp> createState() => _MainAppState();
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MainAppState? state = context.findAncestorStateOfType<_MainAppState>();
+    state?.setLocale(newLocale);
+  }
+  static String getLocale() {
+    return "";
+  }
 }
 
 class _MainAppState extends State<MainApp> {
+  Locale? _locale;
+
+  getLocale() {
+    return _locale?.languageCode;
+  }
+
+  setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -123,6 +146,9 @@ class _MainAppState extends State<MainApp> {
           ),
         ),
       ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: _locale,
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,
